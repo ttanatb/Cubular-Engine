@@ -182,6 +182,8 @@ copy "$(SolutionDir)assets\shaders" "$(SolutionDir)_Binary\assets\shaders\"</Com
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TankClient.cpp" />
+    <ClCompile Include="TankServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Assets\Shaders\fragmentShader.glsl" />
@@ -197,7 +199,10 @@ copy "$(SolutionDir)assets\shaders" "$(SolutionDir)_Binary\assets\shaders\"</Com
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ShaderHelper.h" />
+    <ClInclude Include="SocketUse.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TankClient.h" />
+    <ClInclude Include="TankServer.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
