@@ -99,9 +99,9 @@
       <AdditionalLibraryDirectories>C:\Users\ttana\Documents\Cubular-Engine\packages\glew.1.9.0.1\build\native\lib\v110\Win32\Debug\static</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir "$(OutDir)assets"
-xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
-</Command>
+      <Command>mkdir "$(SolutionDir)_Binary\assets\"
+mkdir "$(SolutionDir)_Binary\assets\shaders\"
+copy "$(SolutionDir)assets\shaders" "$(SolutionDir)_Binary\assets\shaders\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,6 +116,11 @@ xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
       <AdditionalDependencies>glew.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\ttana\Documents\Cubular-Engine\packages\glew.1.9.0.1\build\native\lib\v110\x64\Debug\static</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)_Binary\assets\"
+mkdir "$(SolutionDir)_Binary\assets\shaders\"
+copy "$(SolutionDir)assets\shaders" "$(SolutionDir)_Binary\assets\shaders\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -134,9 +139,9 @@ xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
       <AdditionalLibraryDirectories>C:\Users\ttana\Documents\Cubular-Engine\packages\glew.1.9.0.1\build\native\lib\v110\Win32\Debug\static</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir "$(OutDir)assets"
-xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
-</Command>
+      <Command>mkdir "$(SolutionDir)_Binary\assets\"
+mkdir "$(SolutionDir)_Binary\assets\shaders\"
+copy "$(SolutionDir)assets\shaders" "$(SolutionDir)_Binary\assets\shaders\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -155,6 +160,11 @@ xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
       <AdditionalDependencies>glew.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\ttana\Documents\Cubular-Engine\packages\glew.1.9.0.1\build\native\lib\v110\x64\Debug\static</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(SolutionDir)_Binary\assets\"
+mkdir "$(SolutionDir)_Binary\assets\shaders\"
+copy "$(SolutionDir)assets\shaders" "$(SolutionDir)_Binary\assets\shaders\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
