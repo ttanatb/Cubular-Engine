@@ -31,21 +31,22 @@ TankClient::TankClient( const char* aServerAddress, const int aPort )
     DEBUG_PRINT( "Socket created.\n" );
     
     isDone = false;
-    //ClientThread = std::thread( &Networking::TankClient::ClientWorkThread, this );
-    ClientWorkThread();
+    ClientThread = std::thread( &Networking::TankClient::ClientWorkThread, this );
 }
 
 TankClient::~TankClient()
 {
-    // Cleanup Winsock -------------------
-    closesocket( ClientSocket );
-    WSACleanup();
-
     // Join the client thread and wait for it to be complete
+    isDone = true;
+
     if ( ClientThread.joinable() )
     {
         ClientThread.join();
     }
+
+    // Cleanup Winsock ------------------
+    closesocket( ClientSocket );
+    WSACleanup();
 }
 
 void TankClient::ClientWorkThread()
@@ -70,8 +71,12 @@ void TankClient::ClientWorkThread()
     {
         if ( isDone ) return;
 
-        printf( "Enter a message : " );
-        std::cin >> message;
+        //printf( "Enter a message : " );
+        memset( message, '\0', DEF_BUF_LEN );
+
+        strcpy_s( message, DEF_BUF_LEN, "TEST" );
+
+        //std::cin >> message;
 
         if ( sendto( serverSock, message, strlen( message ), 0, ( struct sockaddr* ) &si_other, slen ) == SOCKET_ERROR )
         {
@@ -79,14 +84,14 @@ void TankClient::ClientWorkThread()
             exit( EXIT_FAILURE );
         }
 
-        memset( buf, '\0', DEF_BUF_LEN );
+        /*memset( buf, '\0', DEF_BUF_LEN );
         if ( recvfrom( serverSock, buf, DEF_BUF_LEN, 0, ( struct sockaddr* )&si_other, &slen ) == SOCKET_ERROR )
         {
             printf( "recvfrom() failed : %d ", WSAGetLastError() );
             exit( EXIT_FAILURE );
-        }
+        }*/
 
-        puts( buf );
+        //puts( buf );
     }
 
 
