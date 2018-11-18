@@ -9,10 +9,11 @@ class Camera;
 class Material
 {
 private:
-    //TODO: if you have additional textures to bind, it will go here
-
     //handle to the shader program
     GLuint shaderProgram;
+
+    //color of the material
+    glm::vec3 albedoColor;
 public:
 
     /// <summary>
@@ -25,6 +26,12 @@ public:
     /// Destruction
     /// </summary>
     ~Material();
+
+    /// <summary>
+    /// Set the albedo color of the box
+    /// </summary>
+    /// <param name="color">Color to set it to</param>
+    void SetAlbedoColor( glm::vec3 color ) { albedoColor = color; } 
 
     /// <summary>
     /// Binds the data that's needed to the uniforms
