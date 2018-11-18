@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SocketUse.h"
+#include <string.h>
 
 namespace Networking
 {
@@ -43,6 +44,16 @@ namespace Networking
 
         /** The current Connected port for the server */
         int Port = 50000;
+
+        /** A vector of connected clients where the string is their IP addr */
+        std::vector<std::string> ConnectedClients;
+
+        /// <summary>
+        /// Check if a given client already exists in the server
+        /// </summary>
+        /// <param name="clientIP">The IP address in question</param>
+        /// <returns>True if the client exists</returns>
+        bool ClientExists( std::string& clientIP );
 
     };  // Class TankServer
 
