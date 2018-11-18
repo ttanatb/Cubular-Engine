@@ -44,4 +44,15 @@ void Material::Bind(Camera * camera, glm::mat4 worldMatrix)
     //TODO - cache this as a private varaible (on init) because the location is same every frame
     GLuint modelToWorldLoc = glGetUniformLocation(shaderProgram, "modelToWorld");
     glUniformMatrix4fv(modelToWorldLoc, 1, GL_FALSE, &(worldMatrix[0][0]));
+
+
+    //get location of the view matrix in the shader
+    //TODO - cache this as a private varaible (on init) because the location is same every frame
+    GLuint colorLoc = glGetUniformLocation(
+        shaderProgram,  //the shader program to look for
+        "albedoColor"    //the name of the variable
+    );
+
+    //pass the variable up to our shader
+    glUniform3f( colorLoc, albedoColor.r, albedoColor.g,albedoColor.b);
 }
