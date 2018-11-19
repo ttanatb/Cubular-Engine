@@ -83,12 +83,13 @@ void TankClient::ClientWorkThread()
 
         // TODO: Replace with the streams
 
-        const char* charCmd = reinterpret_cast< const char* >( &cmdToSend );
+        char charCmd[ 64 ];
+        memcpy( charCmd, ( void* ) ( &cmdToSend ), sizeof( Command ) );
         
 
         if ( sendto( serverSock,
             charCmd,
-            strlen( charCmd ),
+            sizeof( Command ),
             0,
             ( struct sockaddr* ) &si_other, slen ) == SOCKET_ERROR )
         {

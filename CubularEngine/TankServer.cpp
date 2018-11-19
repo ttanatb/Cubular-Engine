@@ -151,11 +151,11 @@ void Networking::TankServer::ProcessCmd( char * aCmd )
 
     // TODO: validate this command
 
-    Command* outCommand = 
-        reinterpret_cast< Command* >( aCmd );
-    outCommand->command = reinterpret_cast< int32_t >( aCmd + sizeof( outCommand->command ) );
+    Command outCommand;
+    memcpy( &outCommand, ( void* ) ( aCmd ), sizeof( Command ) );
+
 
     // Replace with the Stream
 
-    printf( "Client ID : %d  CMD: %d\n", outCommand->clientId, outCommand->command );
+    printf( "Client ID : %d  CMD: %d\n", outCommand.clientId, outCommand.command );
 }
