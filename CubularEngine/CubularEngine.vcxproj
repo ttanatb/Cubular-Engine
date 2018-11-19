@@ -202,6 +202,7 @@ copy "$(SolutionDir)assets\shaders" "$(SolutionDir)_Binary\assets\shaders\"</Com
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="NetworkingDefinitions.h" />
+    <ClInclude Include="Serializer.h" />
     <ClInclude Include="ShaderHelper.h" />
     <ClInclude Include="SocketUse.h" />
     <ClInclude Include="stdafx.h" />
