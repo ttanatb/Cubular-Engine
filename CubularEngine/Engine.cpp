@@ -18,7 +18,6 @@ Engine::~Engine()
     if ( fs ) glDeleteShader( fs );
     if ( vs ) glDeleteShader( vs );
     if ( tankMesh ) delete tankMesh;
-    if ( tankMaterial ) delete tankMaterial;
     if ( camera ) delete camera;
     for ( size_t i = 0; i < gameEntities.size(); ++i )
         delete gameEntities[ i ];

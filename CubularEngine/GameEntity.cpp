@@ -20,6 +20,7 @@ GameEntity::GameEntity(Mesh * mesh,
 
 GameEntity::~GameEntity()
 {
+    if ( material != nullptr ) delete material;
 }
 
 void GameEntity::Update()
