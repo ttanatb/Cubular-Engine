@@ -177,7 +177,6 @@ copy "$(SolutionDir)assets\shaders" "$(SolutionDir)_Binary\assets\shaders\"</Com
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Serializer.cpp" />
     <ClCompile Include="ShaderHelper.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -205,7 +204,6 @@ copy "$(SolutionDir)assets\shaders" "$(SolutionDir)_Binary\assets\shaders\"</Com
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="NetworkingDefinitions.h" />
-    <ClInclude Include="Serializer.h" />
     <ClInclude Include="ShaderHelper.h" />
     <ClInclude Include="SocketUse.h" />
     <ClInclude Include="stdafx.h" />

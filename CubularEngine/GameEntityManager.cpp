@@ -60,7 +60,7 @@ void GameEntityManager::Update( std::vector<Networking::BroadcastedGameObject> b
         else
         {
             Material *material = new Material( *tankBaseMaterial );
-            material->SetAlbedoColor( g_tankColors[ static_cast<size_t>( obj.gameObjId ) % MAX_CONNECTIONS ] );
+            material->SetAlbedoColor( g_tankColors[ static_cast<size_t>( obj.gameObjId ) % Networking::MAX_CONNECTIONS ] );
             GameEntity *entity = new GameEntity(
                 tankMesh,
                 new Material( *tankBaseMaterial ),

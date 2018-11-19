@@ -14,7 +14,7 @@ private:
     Mesh* tankMesh;
     Material *tankBaseMaterial;
 
-    glm::vec3 g_tankColors[ MAX_CONNECTIONS ] = {
+    glm::vec3 g_tankColors[ Networking::MAX_CONNECTIONS ] = {
         glm::vec3( 1.0f, 0.0f, 0.0f ),
         glm::vec3( 0.0f, 1.0f, 0.0f ),
         glm::vec3( 0.0f, 0.0f, 1.0f ),
