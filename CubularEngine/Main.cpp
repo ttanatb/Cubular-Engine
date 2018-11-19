@@ -93,8 +93,5 @@ int main( int argc, char* argv[] )
         }
     }   // Client scope
 
-#if defined(_DEBUG)
-    _CrtDumpMemoryLeaks();
-#endif
     return 0;
 }

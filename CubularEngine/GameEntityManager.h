@@ -1,6 +1,5 @@
 #pragma once
 
-#include <unordered_map>
 #include "GameEntity.h"
 
 class Material;
@@ -9,7 +8,7 @@ class Mesh;
 class GameEntityManager
 {
 private:
-    std::unordered_map<uint32_t, GameEntity *> gameEntities;
+    std::unordered_map<uint32_t, GameEntity *> *gameEntities;
     std::unordered_map<uint32_t, bool> isAlive;
 
     Mesh* tankMesh;
@@ -47,6 +46,14 @@ public:
     /// De-allocation
     /// </summary>
     static void Release();
+
+    void SetMaterial( Material *mat ) { tankBaseMaterial = mat; }
+    
+    void SetMesh( Mesh *mesh ) { tankMesh = mesh; }
+
+    std::unordered_map<uint32_t, GameEntity *>* GetGameEntities() { return gameEntities; }
+
+    void Init( Material *mat, Mesh* mesh );
 
     /// <summary>
     /// Updates the game objects based off of the received game objects

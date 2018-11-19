@@ -8,11 +8,17 @@ GameEntityManager* GameEntityManager::instance = nullptr;
 
 GameEntityManager::GameEntityManager()
 {
+    gameEntities = new std::unordered_map<uint32_t, GameEntity *>;
 }
-
 
 GameEntityManager::~GameEntityManager()
 {
+    for ( const auto& pair : *gameEntities )
+    {
+        delete (*gameEntities)[ pair.first ];
+    }
+
+    delete gameEntities;
 }
 
 GameEntityManager * GameEntityManager::GetInstance()
@@ -31,6 +37,12 @@ void GameEntityManager::Release()
     }
 }
 
+void GameEntityManager::Init( Material * mat, Mesh * mesh )
+{
+    tankMesh = mesh;
+    tankBaseMaterial = mat;
+}
+
 void GameEntityManager::Update( std::vector<Networking::BroadcastedGameObject> broadcastedGameObjects )
 {
     for ( size_t i = 0; i < broadcastedGameObjects.size(); ++i )
@@ -38,9 +50,9 @@ void GameEntityManager::Update( std::vector<Networking::BroadcastedGameObject> b
         Networking::BroadcastedGameObject obj = broadcastedGameObjects[ i ];
 
         //update
-        if ( auto searchResult = gameEntities.find( obj.gameObj ) != gameEntities.end() )
+        if ( auto searchResult = gameEntities->find( obj.gameObj ) != gameEntities->end() )
         {
-            GameEntity *entity = gameEntities[ obj.gameObj ];
+            GameEntity *entity = (*gameEntities)[ obj.gameObj ];
             entity->SetPosition( glm::vec3( obj.x, obj.y, 0.f ) );
         }
 
@@ -56,22 +68,22 @@ void GameEntityManager::Update( std::vector<Networking::BroadcastedGameObject> b
                 glm::vec3( 0.f ),
                 glm::vec3( 1.f )
             );
-            gameEntities.insert( { obj.gameObj, entity } );
+            gameEntities->insert( { obj.gameObj, entity } );
         }
 
         isAlive[ obj.gameObj ] = true;
     }
 
     //find and remove things
-    if ( gameEntities.size() > broadcastedGameObjects.size() )
+    if ( gameEntities->size() > broadcastedGameObjects.size() )
     {
         for ( const auto& pair : isAlive )
         {
             //remove if no longer alive
             if ( !pair.second )
             {
-                delete gameEntities[ pair.first ];
-                gameEntities.erase( pair.first );
+                delete (*gameEntities)[ pair.first ];
+                gameEntities->erase( pair.first );
             }
         }
     }
