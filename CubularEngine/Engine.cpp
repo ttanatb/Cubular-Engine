@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Camera.h"
 #include "Engine.h"
-#include "GameEntity.h"
+#include "GameEntityManager.h"
 #include "Input.h"
 #include "Material.h"
 #include "Mesh.h"
@@ -17,12 +17,13 @@ Engine::~Engine()
     glfwTerminate();
     if ( fs ) glDeleteShader( fs );
     if ( vs ) glDeleteShader( vs );
+    if ( shaderProgram ) glDeleteShader( shaderProgram );
+    if ( tankMaterial ) delete tankMaterial;
     if ( tankMesh ) delete tankMesh;
     if ( camera ) delete camera;
-    for ( size_t i = 0; i < gameEntities.size(); ++i )
-        delete gameEntities[ i ];
 
     Input::Release();
+    GameEntityManager::Release();
 }
 
 int Engine::Init()
@@ -62,13 +63,12 @@ int Engine::Init()
     int result = LoadAssets();
     if ( result != 0 ) return result;
 
-    result = InitGameEntities();
-    if ( result != 0 ) return result;
-
     //init systems
     input = Input::GetInstance();
     input->Init( window );
 
+    gameEntityManager = GameEntityManager::GetInstance();
+    gameEntityManager->Init( tankMaterial, tankMesh );
     return 0;
 }
 
@@ -94,8 +94,9 @@ void Engine::Run()
             break;
 
         /* GAMEPLAY UPDATE */
-        for ( size_t i = 0; i < gameEntities.size(); ++i )
-            gameEntities[ i ]->Update();
+        std::unordered_map<uint32_t, GameEntity *> *gameEntities = gameEntityManager->GetGameEntities( );
+        for ( const auto& pair : *gameEntities )
+            ( *gameEntities )[ pair.first ]->Update();
 
         camera->Update();
 
@@ -106,8 +107,8 @@ void Engine::Run()
         glClearColor( 0.392f, 0.584f, 0.929f, 1.0f );
 
         /* RENDER */
-        for ( size_t i = 0; i < gameEntities.size(); ++i )
-            gameEntities[ i ]->Render( camera );
+        for ( const auto& pair : *gameEntities )
+            ( *gameEntities )[ pair.first ]->Render( camera );
 
         /* POST-RENDER */
 
@@ -185,14 +186,3 @@ int Engine::LoadAssets()
     return 0;
 }
 
-int Engine::InitGameEntities()
-{
-    gameEntities.push_back( new GameEntity( 
-        tankMesh,
-        tankMaterial,
-        glm::vec3( 0.f ),
-        glm::vec3( 0.f ),
-        glm::vec3( 1.f )
-    ) );
-    return 0;
-}

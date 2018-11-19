@@ -3,8 +3,8 @@
 class Mesh;
 class Material;
 class Camera;
-class GameEntity;
 class Input;
+class GameEntityManager;
 
 class Engine
 {
@@ -16,7 +16,6 @@ public:
     void Run();
 private:
     int LoadAssets();
-    int InitGameEntities();
     GLFWwindow *window;
 
     GLuint shaderProgram;
@@ -26,8 +25,8 @@ private:
     Mesh* tankMesh;
     Material* tankMaterial;
 
-    Camera *camera;
-    std::vector<GameEntity *> gameEntities;
+    Camera* camera;
 
     Input* input;
+    GameEntityManager* gameEntityManager;
 };
