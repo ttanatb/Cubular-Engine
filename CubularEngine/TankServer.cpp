@@ -14,6 +14,7 @@ TankServer::TankServer( const int aPort )
 
 TankServer::~TankServer()
 {
+    isDone = true;
     // Cleanup -------------------
     closesocket( ServerSocket );
     WSACleanup();
@@ -63,6 +64,8 @@ void TankServer::ServerWorker()
     // Wait for data ------------------------------
     while ( 1 )
     {
+        if ( isDone ) return;
+
         DEBUG_PRINT( "Waiting for data..." );
         fflush( stdout );
 

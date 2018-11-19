@@ -82,17 +82,22 @@ void TankClient::ClientWorkThread()
         // IF There is something in the Cmd buffer...
             // Send it to the server
 
-        /*if ( sendto( serverSock, message, strlen( message ), 0, ( struct sockaddr* ) &si_other, slen ) == SOCKET_ERROR )
+        if ( sendto( serverSock, message, strlen( message ), 0, ( struct sockaddr* ) &si_other, slen ) == SOCKET_ERROR )
         {
             printf( "sendto() failed : %d ", WSAGetLastError() );
             exit( EXIT_FAILURE );
-        }*/
+        }
 
         memset( buf, '\0', DEF_BUF_LEN );
         if ( recvfrom( serverSock, buf, DEF_BUF_LEN, 0, ( struct sockaddr* )&si_other, &slen ) == SOCKET_ERROR )
         {
             printf( "recvfrom() failed : %d ", WSAGetLastError() );
             exit( EXIT_FAILURE );
+        }
+
+        if ( strcmp( buf, "ACK" ) )
+        {
+            DEBUG_PRINT( "EYYY ACK" );
         }
 
         puts( buf );

@@ -2,6 +2,7 @@
 
 #include "SocketUse.h"
 #include <string.h>
+#include <atomic>
 
 namespace Networking
 {
@@ -47,6 +48,9 @@ namespace Networking
 
         /** A vector of connected clients where the string is their IP addr */
         std::vector<std::string> ConnectedClients;
+
+        /** Atomic flag to check if we are done */
+        std::atomic<bool> isDone;
 
         /// <summary>
         /// Check if a given client already exists in the server

@@ -87,7 +87,7 @@ int main( int argc, char* argv[] )
     {
         if ( isClient )
         {
-            Client = std::make_unique<Networking::TankClient>( "127.0.0.1", PORT );
+            Client = std::make_unique<Networking::TankClient>( "129.21.81.191", PORT );
 
             Engine engine = Engine();
             if ( engine.Init() == 0 )
