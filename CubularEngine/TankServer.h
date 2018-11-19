@@ -75,6 +75,12 @@ namespace Networking
         /// <param name="aCmd">Char command that was recieved from the client</param>
         void ProcessCmd( char* aCmd );
       
+        /// <summary>
+        /// Send this command update to all current clients
+        /// </summary>
+        /// <param name="cmd">The command to send</param>
+        void BroadCastToAllClients( Command cmd );
+
         std::vector<BroadcastedGameObject> gameObjects;
         std::vector<BroadcastedGameObjectRigidBody> rigidBodies;
 

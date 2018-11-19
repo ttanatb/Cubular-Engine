@@ -117,7 +117,7 @@ inline const int Networking::TankServer::GetPort() const
     return Port;
 }
 
-void Networking::TankServer::UpdateGameObjects()
+void TankServer::UpdateGameObjects()
 {
     float dt = timer->GetDeltaFloatTime();
     //read all the commands in the queue?
@@ -133,7 +133,7 @@ void Networking::TankServer::UpdateGameObjects()
     timer->UpdateTimer();
 }
 
-bool Networking::TankServer::ClientExists( std::string & clientIP )
+bool TankServer::ClientExists( std::string & clientIP )
 {
     auto itr = ConnectedClients.begin();
     for ( ; itr != ConnectedClients.end(); ++itr )
@@ -145,7 +145,7 @@ bool Networking::TankServer::ClientExists( std::string & clientIP )
     return false;
 }
 
-void Networking::TankServer::ProcessCmd( char * aCmd )
+void TankServer::ProcessCmd( char * aCmd )
 {
     assert( aCmd != nullptr );
 
@@ -158,4 +158,8 @@ void Networking::TankServer::ProcessCmd( char * aCmd )
     // Replace with the Stream
 
     printf( "Client ID : %d  CMD: %d\n", outCommand.clientId, outCommand.command );
+}
+
+void TankServer::BroadCastToAllClients( Command cmd )
+{
 }
