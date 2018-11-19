@@ -50,9 +50,9 @@ void GameEntityManager::Update( std::vector<Networking::BroadcastedGameObject> b
         Networking::BroadcastedGameObject obj = broadcastedGameObjects[ i ];
 
         //update
-        if ( auto searchResult = gameEntities->find( obj.gameObj ) != gameEntities->end() )
+        if ( auto searchResult = gameEntities->find( obj.gameObjId ) != gameEntities->end() )
         {
-            GameEntity *entity = (*gameEntities)[ obj.gameObj ];
+            GameEntity *entity = (*gameEntities)[ obj.gameObjId ];
             entity->SetPosition( glm::vec3( obj.x, obj.y, 0.f ) );
         }
 
@@ -60,7 +60,7 @@ void GameEntityManager::Update( std::vector<Networking::BroadcastedGameObject> b
         else
         {
             Material *material = new Material( *tankBaseMaterial );
-            material->SetAlbedoColor( g_tankColors[ static_cast<size_t>( obj.gameObj ) % MAX_CONNECTIONS ] );
+            material->SetAlbedoColor( g_tankColors[ static_cast<size_t>( obj.gameObjId ) % MAX_CONNECTIONS ] );
             GameEntity *entity = new GameEntity(
                 tankMesh,
                 new Material( *tankBaseMaterial ),
@@ -68,10 +68,10 @@ void GameEntityManager::Update( std::vector<Networking::BroadcastedGameObject> b
                 glm::vec3( 0.f ),
                 glm::vec3( 1.f )
             );
-            gameEntities->insert( { obj.gameObj, entity } );
+            gameEntities->insert( { obj.gameObjId, entity } );
         }
 
-        isAlive[ obj.gameObj ] = true;
+        isAlive[ obj.gameObjId ] = true;
     }
 
     //find and remove things

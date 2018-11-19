@@ -8,7 +8,7 @@ namespace Networking
 
     struct BroadcastedGameObject
     {
-        int32_t gameObj;
+        int32_t gameObjId;
         float x;
         float y;
     };

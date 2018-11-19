@@ -4,8 +4,16 @@
 #include <string.h>
 #include <atomic>
 
+class GameTime;
+
 namespace Networking
 {
+    struct BroadcastedGameObjectRigidBody
+    {
+        float speedX;
+        float speedY;
+    };
+
     /// <summary>
     /// Server logic for the tank game
     /// </summary>
@@ -38,6 +46,8 @@ namespace Networking
         /// <returns>Current port that the server is running</returns>
         inline const int GetPort() const;
 
+        void UpdateGameObjects();
+
     private:
 
         /** The socket for the server to use */
@@ -59,9 +69,12 @@ namespace Networking
         /// <returns>True if the client exists</returns>
         bool ClientExists( std::string& clientIP );
 
-
         void ProcessCmd( char* aCmd );
 
+        std::vector<BroadcastedGameObject> gameObjects;
+        std::vector<BroadcastedGameObjectRigidBody> rigidBodies;
+
+        GameTime *timer;
 
     };  // Class TankServer
 

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "TankServer.h"
+#include "GameTime.h"
 
 using namespace Networking;
 
@@ -8,8 +9,11 @@ TankServer::TankServer( const int aPort )
 {
     DEBUG_PRINT( "--- Server App ---" );
     DEBUG_PRINT( "Running on Port: %d", Port );
+    timer = GameTime::GetInstance();
+    timer->Init();
 
     ServerWorker();
+    UpdateGameObjects();
 }
 
 TankServer::~TankServer()
@@ -111,6 +115,22 @@ void TankServer::ServerWorker()
 inline const int Networking::TankServer::GetPort() const
 {
     return Port;
+}
+
+void Networking::TankServer::UpdateGameObjects()
+{
+    float dt = timer->GetDeltaFloatTime();
+    //read all the commands in the queue?
+
+    for ( size_t i = 0; i < rigidBodies.size(); ++i )
+    {
+        gameObjects[ i ].x += rigidBodies[ i ].speedX * dt;
+        gameObjects[ i ].y += rigidBodies[ i ].speedY * dt;
+    }
+
+    //broadcast out all the gameObjects?
+
+    timer->UpdateTimer();
 }
 
 bool Networking::TankServer::ClientExists( std::string & clientIP )
