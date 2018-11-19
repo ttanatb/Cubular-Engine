@@ -6,7 +6,7 @@ using namespace Networking;
 TankServer::TankServer( const int aPort )
     : Port( aPort )
 {
-    DEBUG_PRINT( " --- Server App ---" );
+    DEBUG_PRINT( "--- Server App ---" );
     DEBUG_PRINT( "Running on Port: %d", Port );
 
     ServerWorker();
@@ -74,15 +74,17 @@ void TankServer::ServerWorker()
             exit( EXIT_FAILURE );
         }
 
+        // Get the IP of this data and see if the client exists
         memset( ip_str, '\0', INET_ADDRSTRLEN );
         inet_ntop( AF_INET, &( si_other.sin_addr ), ip_str, INET_ADDRSTRLEN );
         std::string newIP = ip_str;
 
         if ( !ClientExists( newIP ) )
-        {
             ConnectedClients.push_back( newIP );
-        }
         
+
+        ProcessCmd( buf );
+
         // Do something with the received message
         DEBUG_PRINT( "Data received: %s from %s\n", buf, ip_str );
 
@@ -110,4 +112,12 @@ bool Networking::TankServer::ClientExists( std::string & clientIP )
     }
 
     return false;
+}
+
+void Networking::TankServer::ProcessCmd( char * aCmd )
+{
+    assert( aCmd != nullptr );
+
+    // See what commands are a happening herqe
+
 }

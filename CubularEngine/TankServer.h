@@ -55,6 +55,10 @@ namespace Networking
         /// <returns>True if the client exists</returns>
         bool ClientExists( std::string& clientIP );
 
+
+        void ProcessCmd( char* aCmd );
+
+
     };  // Class TankServer
 
 }   // End namespace Networking
