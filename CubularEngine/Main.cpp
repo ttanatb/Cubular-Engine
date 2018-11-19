@@ -74,10 +74,14 @@ int main( int argc, char* argv[] )
         }
     }
 
-    if ( isServer )
+    // Server Scope ---------------
     {
-        Server = std::make_unique<Networking::TankServer>( PORT );
-    }
+        if ( isServer )
+        {
+            Server = std::make_unique<Networking::TankServer>( PORT );
+        }
+    }   // Server scope
+
 
     // Client Scope -----------
     {
@@ -93,8 +97,5 @@ int main( int argc, char* argv[] )
         }
     }   // Client scope
 
-#if defined(_DEBUG)
-    _CrtDumpMemoryLeaks();
-#endif
     return 0;
 }

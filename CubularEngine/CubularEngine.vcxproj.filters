@@ -109,5 +109,8 @@
     <ClInclude Include="NetworkingDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ConcurrentQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

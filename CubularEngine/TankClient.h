@@ -1,8 +1,10 @@
 #pragma once
 
-#include "SocketUse.h"
 #include <thread>
 #include <atomic>
+
+#include "SocketUse.h"
+#include "ConcurrentQueue.h"
 
 namespace Networking
 {
@@ -28,10 +30,10 @@ namespace Networking
         ~TankClient();
 
         /// <summary>
-        /// Worker thread for the client to listen to data from the 
-        /// server on. Handle the processing of received commands.
+        /// Add the given command to the current command queue
         /// </summary>
-        void ClientWorkThread();
+        /// <param name="cmd">A command to send</param>
+        void SendCommand( Command cmd );
 
         /// <summary>
         /// Signal to the client that we should stop listening for 
@@ -65,6 +67,14 @@ namespace Networking
         /** ID for the connection to the server */
         int serverSock;
 
+        /** The queue of commands that we are waiting to send to the server */
+        ConcurrentQueue<Command> commandQueue;
+
+        /// <summary>
+        /// Worker thread for the client to listen to data from the 
+        /// server on. Handle the processing of received commands.
+        /// </summary>
+        void ClientWorkThread();
     };
 
 }

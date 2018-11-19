@@ -80,9 +80,18 @@ void TankServer::ServerWorker()
         std::string newIP = ip_str;
 
         if ( !ClientExists( newIP ) )
+        {
+            char ackCmd [ 64 ];
+            strcpy_s( ackCmd, 64, "ACK" );
             ConnectedClients.push_back( newIP );
+            // Send an acknowledgment back to this client that they have connected
+            if ( sendto( ServerSocket, ackCmd, strlen(ackCmd) + 1, 0, ( struct sockaddr * )&si_other, slen ) == SOCKET_ERROR )
+            {
+                DEBUG_PRINT( "ack send failed with error code : %d", WSAGetLastError() );
+                exit( EXIT_FAILURE );
+            }
+        }
         
-
         ProcessCmd( buf );
 
         // Do something with the received message
@@ -90,7 +99,7 @@ void TankServer::ServerWorker()
 
         if ( sendto( ServerSocket, buf, recv_len, 0, ( struct sockaddr * )&si_other, slen ) == SOCKET_ERROR )
         {
-            DEBUG_PRINT( "recvfrom failed with error code : %d", WSAGetLastError() );
+            DEBUG_PRINT( "sendto failed with error code : %d", WSAGetLastError() );
             exit( EXIT_FAILURE );
         }
     }
