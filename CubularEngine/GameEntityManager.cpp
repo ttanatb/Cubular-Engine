@@ -36,23 +36,43 @@ void GameEntityManager::Update( std::vector<Networking::BroadcastedGameObject> b
     for ( size_t i = 0; i < broadcastedGameObjects.size(); ++i )
     {
         Networking::BroadcastedGameObject obj = broadcastedGameObjects[ i ];
-        if ( auto searchResult = gameEntities.find( obj.gameObj ) == gameEntities.end() )
-        {
-            Material *material = new Material( *tankBaseMaterial );
-            //material->SetAlbedoColor( Networking::g_tankColors[ static_cast<size_t>(obj.gameObj) % MAX_CONNECTIONS ] );
-            GameEntity *entity = new GameEntity( 
-                tankMesh, 
-                new Material( *tankBaseMaterial ), 
-                glm::vec3( obj.x, obj.y, 0.f ), 
-                glm::vec3( 0.f ), 
-                glm::vec3( 1.f ) 
-            );
-            gameEntities.insert( { obj.gameObj, entity } );
-        }
-        else
+
+        //update
+        if ( auto searchResult = gameEntities.find( obj.gameObj ) != gameEntities.end() )
         {
             GameEntity *entity = gameEntities[ obj.gameObj ];
             entity->SetPosition( glm::vec3( obj.x, obj.y, 0.f ) );
+        }
+
+        //add new game entity
+        else
+        {
+            Material *material = new Material( *tankBaseMaterial );
+            material->SetAlbedoColor( g_tankColors[ static_cast<size_t>( obj.gameObj ) % MAX_CONNECTIONS ] );
+            GameEntity *entity = new GameEntity(
+                tankMesh,
+                new Material( *tankBaseMaterial ),
+                glm::vec3( obj.x, obj.y, 0.f ),
+                glm::vec3( 0.f ),
+                glm::vec3( 1.f )
+            );
+            gameEntities.insert( { obj.gameObj, entity } );
+        }
+
+        isAlive[ obj.gameObj ] = true;
+    }
+
+    //find and remove things
+    if ( gameEntities.size() > broadcastedGameObjects.size() )
+    {
+        for ( const auto& pair : isAlive )
+        {
+            //remove if no longer alive
+            if ( !pair.second )
+            {
+                delete gameEntities[ pair.first ];
+                gameEntities.erase( pair.first );
+            }
         }
     }
 }
