@@ -20,6 +20,7 @@
 
 #include "Utils.h"
 #include "Configs.h"
+#include "NetworkingDefinitions.h"
 
 #if defined(_DEBUG) 
 #define _CRTDBG_MAP_ALLOC  

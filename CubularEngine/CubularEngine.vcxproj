@@ -171,6 +171,7 @@ copy "$(SolutionDir)assets\shaders" "$(SolutionDir)_Binary\assets\shaders\"</Com
     <ClCompile Include="Configs.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameEntity.cpp" />
+    <ClCompile Include="GameEntityManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -195,9 +196,11 @@ copy "$(SolutionDir)assets\shaders" "$(SolutionDir)_Binary\assets\shaders\"</Com
     <ClInclude Include="Configs.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameEntity.h" />
+    <ClInclude Include="GameEntityManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="NetworkingDefinitions.h" />
     <ClInclude Include="ShaderHelper.h" />
     <ClInclude Include="SocketUse.h" />
     <ClInclude Include="stdafx.h" />

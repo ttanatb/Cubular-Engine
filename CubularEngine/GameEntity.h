@@ -46,5 +46,7 @@ public:
     /// </summary>
     void Render(Camera* camera);
 
+    void SetPosition( glm::vec3 position ) { this->position = position; }
+
 };
 
