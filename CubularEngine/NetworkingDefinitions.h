@@ -23,6 +23,13 @@ namespace Networking
     struct Command
     {
         int32_t clientId;
-        int32_t command;
+
+        struct
+        {
+            unsigned int move_left  : 1;
+            unsigned int move_right : 1;
+            unsigned int move_up    : 1;
+            unsigned int move_down  : 1;
+        };
     };    
 }

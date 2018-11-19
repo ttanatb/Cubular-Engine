@@ -32,7 +32,11 @@ TankClient::TankClient( const char* aServerAddress, const int aPort )
 
     Command testCmd;
     testCmd.clientId = 125;
-    testCmd.command = 42;
+    testCmd.move_down  = 1;
+    testCmd.move_up    = 1;
+    testCmd.move_left  = 1;
+    testCmd.move_right = 1;
+
     commandQueue.emplace_back( testCmd );
 
     isDone = false;

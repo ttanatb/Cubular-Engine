@@ -153,11 +153,14 @@ void TankServer::ProcessCmd( char * aCmd )
 
     Command outCommand;
     memcpy( &outCommand, ( void* ) ( aCmd ), sizeof( Command ) );
-
-
+   
     // Replace with the Stream
 
-    printf( "Client ID : %d  CMD: %d\n", outCommand.clientId, outCommand.command );
+    printf( "Client ID : %d \n", outCommand.clientId );
+    printf( "\tL: %d\n", outCommand.move_left );
+    printf( "\tR: %d\n", outCommand.move_right );
+    printf( "\tU: %d\n", outCommand.move_up );
+    printf( "\tD: %d\n", outCommand.move_down );
 }
 
 void TankServer::BroadCastToAllClients( Command cmd )
