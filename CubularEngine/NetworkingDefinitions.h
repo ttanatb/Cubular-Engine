@@ -17,7 +17,5 @@ namespace Networking
     {
         int32_t clientId;
         int32_t command;
-    };
-
-
+    };    
 }

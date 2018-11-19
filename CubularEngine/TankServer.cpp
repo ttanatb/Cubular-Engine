@@ -84,17 +84,17 @@ void TankServer::ServerWorker()
 
         if ( !ClientExists( newIP ) )
         {
-            char ackCmd [ 64 ];
+            char ackCmd[ 64 ];
             strcpy_s( ackCmd, 64, "ACK" );
             ConnectedClients.push_back( newIP );
             // Send an acknowledgment back to this client that they have connected
-            if ( sendto( ServerSocket, ackCmd, strlen(ackCmd) + 1, 0, ( struct sockaddr * )&si_other, slen ) == SOCKET_ERROR )
+            if ( sendto( ServerSocket, ackCmd, strlen( ackCmd ) + 1, 0, ( struct sockaddr * )&si_other, slen ) == SOCKET_ERROR )
             {
                 DEBUG_PRINT( "ack send failed with error code : %d", WSAGetLastError() );
                 exit( EXIT_FAILURE );
             }
         }
-        
+
         ProcessCmd( buf );
 
         // Do something with the received message
@@ -115,7 +115,6 @@ inline const int Networking::TankServer::GetPort() const
 
 bool Networking::TankServer::ClientExists( std::string & clientIP )
 {
-
     auto itr = ConnectedClients.begin();
     for ( ; itr != ConnectedClients.end(); ++itr )
     {
@@ -130,6 +129,13 @@ void Networking::TankServer::ProcessCmd( char * aCmd )
 {
     assert( aCmd != nullptr );
 
-    // See what commands are a happening herqe
+    // TODO: validate this command
 
+    Command* outCommand = 
+        reinterpret_cast< Command* >( aCmd );
+    outCommand->command = reinterpret_cast< int32_t >( aCmd + sizeof( outCommand->command ) );
+
+    // Replace with the Stream
+
+    printf( "Client ID : %d  CMD: %d\n", outCommand->clientId, outCommand->command );
 }

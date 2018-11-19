@@ -59,10 +59,12 @@ namespace Networking
         /// <returns>True if the client exists</returns>
         bool ClientExists( std::string& clientIP );
 
-
+        /// <summary>
+        /// Process a command received from the client
+        /// </summary>
+        /// <param name="aCmd">Char command that was recieved from the client</param>
         void ProcessCmd( char* aCmd );
-
-
+      
     };  // Class TankServer
 
 }   // End namespace Networking

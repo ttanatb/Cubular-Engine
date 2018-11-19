@@ -29,7 +29,12 @@ TankClient::TankClient( const char* aServerAddress, const int aPort )
         exit( EXIT_FAILURE );
     }
     DEBUG_PRINT( "Socket created.\n" );
-    
+
+    Command testCmd;
+    testCmd.clientId = 125;
+    testCmd.command = 42;
+    commandQueue.emplace_back( testCmd );
+
     isDone = false;
     ClientThread = std::thread( &Networking::TankClient::ClientWorkThread, this );
 }
@@ -47,11 +52,11 @@ void Networking::TankClient::SendCommand( Command cmd )
 {
     // Add this command to the command queue
     commandQueue.emplace_back( cmd );
-
 }
 
-void TankClient::ClientWorkThread()
+void TankClient::ClientWorkThread() 
 {
+#pragma region Init Socket
     int slen;
     char buf[ DEF_BUF_LEN ];
     char message[ DEF_BUF_LEN ];
@@ -67,25 +72,28 @@ void TankClient::ClientWorkThread()
     size_t outSize;
     mbstowcs_s( &outSize, wtext, ServerAddr, strlen( ServerAddr ) + 1 );
     InetPton( AF_INET, wtext, &si_other.sin_addr.S_un.S_addr );
+#pragma endregion
 
     while ( 1 )
     {
         if ( isDone ) return;
+        
+        Command cmdToSend;
+        commandQueue.pop_front( cmdToSend );
 
-        //printf( "Enter a message : " );
-        memset( message, '\0', DEF_BUF_LEN );
-        strcpy_s( message, DEF_BUF_LEN, "TEST" );
+        // TODO: Replace with the streams
 
-        /*Command cmdToSend;
-        commandQueue.pop_front( cmdToSend );*/
+        const char* charCmd = reinterpret_cast< const char* >( &cmdToSend );
+        
 
-        // IF There is something in the Cmd buffer...
-            // Send it to the server
-
-        if ( sendto( serverSock, message, strlen( message ), 0, ( struct sockaddr* ) &si_other, slen ) == SOCKET_ERROR )
+        if ( sendto( serverSock,
+            charCmd,
+            strlen( charCmd ),
+            0,
+            ( struct sockaddr* ) &si_other, slen ) == SOCKET_ERROR )
         {
-            printf( "sendto() failed : %d ", WSAGetLastError() );
-            exit( EXIT_FAILURE );
+        printf( "sendto() failed : %d ", WSAGetLastError() );
+        exit( EXIT_FAILURE );
         }
 
         memset( buf, '\0', DEF_BUF_LEN );
@@ -98,6 +106,7 @@ void TankClient::ClientWorkThread()
         if ( strcmp( buf, "ACK" ) )
         {
             DEBUG_PRINT( "EYYY ACK" );
+            // Get my ID from the ACK command
         }
 
         puts( buf );
