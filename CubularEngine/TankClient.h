@@ -4,7 +4,6 @@
 #include <atomic>
 
 #include "SocketUse.h"
-#include "ConcurrentQueue.h"
 
 namespace Networking
 {
@@ -47,6 +46,11 @@ namespace Networking
         /// <returns>The current port in use by this client</returns>
         inline const int GetPort() const;
 
+        /** The queue of broadcasted Objects */
+        ConcurrentQueue<std::vector<BroadcastedGameObject>> broadcastedObject;
+
+        /** Atomic flag to check if we are done */
+        std::atomic<bool> isDone;
     private:
 
         /** The socket for the client to use */
@@ -61,11 +65,11 @@ namespace Networking
         /** Thread where client is listening for data from the server */
         std::thread ClientThread;
 
-        /** Atomic flag to check if we are done */
-        std::atomic<bool> isDone;
 
         /** ID for the connection to the server */
         int serverSock;
+
+        int32_t clientID = -1;
 
         /** The queue of commands that we are waiting to send to the server */
         ConcurrentQueue<Command> commandQueue;

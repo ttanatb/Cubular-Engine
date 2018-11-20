@@ -7,10 +7,10 @@
 #include "Mesh.h"
 #include "ShaderHelper.h"
 
-Engine::Engine()
+Engine::Engine( Networking::TankClient* client )
 {
+    this->client = client;
 }
-
 
 Engine::~Engine()
 {
@@ -92,6 +92,38 @@ void Engine::Run()
         //breaks out of the loop if user presses ESC
         if ( input->IsKeyDown( GLFW_KEY_ESCAPE ) )
             break;
+        else if ( input->IsKeyDown( GLFW_KEY_LEFT ) )
+        {
+            Networking::Command c = { };
+            c.move_left = 1;
+            client->SendCommand( c );
+        }
+        else if ( input->IsKeyDown( GLFW_KEY_UP ) )
+        {
+            Networking::Command c = { };
+            c.move_up = 1;
+            client->SendCommand( c );
+        }
+        else if ( input->IsKeyDown( GLFW_KEY_DOWN ) )
+        {
+            Networking::Command c = { };
+            c.move_down = 1;
+            client->SendCommand( c );
+        }
+        else if ( input->IsKeyDown( GLFW_KEY_RIGHT ) )
+        {
+            Networking::Command c = { };
+            c.move_right = 1;
+            client->SendCommand( c );
+        }
+
+        if ( !client->broadcastedObject.empty() )
+        {
+            std::vector<Networking::BroadcastedGameObject> vector(client->broadcastedObject.size());
+            vector.push_back( { } );    //push and empty thing to the first memory adress to make it not throw eerrors
+            client->broadcastedObject.pop_front( vector );
+            gameEntityManager->Update( vector );
+        }
 
         /* GAMEPLAY UPDATE */
         std::unordered_map<uint32_t, GameEntity *> *gameEntities = gameEntityManager->GetGameEntities( );
@@ -119,6 +151,8 @@ void Engine::Run()
         //swaps the front buffer with the back buffer
         glfwSwapBuffers( window );
     }
+
+    this->client->isDone = true;
 }
 
 int Engine::LoadAssets()

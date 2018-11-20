@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include "ConcurrentQueue.h"
 
 //GL and GLM
 #define GLEW_STATIC
@@ -23,15 +24,15 @@
 #include "Configs.h"
 #include "NetworkingDefinitions.h"
 
-#if defined(_DEBUG) 
-#define _CRTDBG_MAP_ALLOC  
-
-#include <crtdbg.h> 
-
-#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#define new DEBUG_NEW
-#include <iostream>
-#else
-#include <stdexcpt.h>
-#include <stdexcept>
-#endif
+//#if defined(_DEBUG) 
+//#define _CRTDBG_MAP_ALLOC  
+//
+//#include <crtdbg.h> 
+//
+//#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//#define new DEBUG_NEW
+//#include <iostream>
+//#else
+//#include <stdexcpt.h>
+//#include <stdexcept>
+//#endif

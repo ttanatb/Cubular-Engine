@@ -25,12 +25,7 @@ GameEntity::~GameEntity()
 
 void GameEntity::Update()
 {
-    eulerAngles.y += 0.001f;   //very small increment because we don't have deltaTime
-
-    worldMatrix = glm::rotate(glm::identity<glm::mat4>(),
-        this->eulerAngles.y,
-        glm::vec3(0.f, 1.f, 0.f)
-    );
+    worldMatrix = glm::translate( glm::identity<glm::mat4>(), position );
 }
 
 void GameEntity::Render(Camera* camera)

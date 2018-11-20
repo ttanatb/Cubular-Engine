@@ -31,5 +31,11 @@ namespace Networking
             unsigned int move_up    : 1;
             unsigned int move_down  : 1;
         };
-    };    
+    };   
+
+    enum ConnectionType : int32_t
+    {
+        ConnectionAck = 0,
+        Broadcast = 1
+    };
 }

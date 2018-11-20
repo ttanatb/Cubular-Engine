@@ -3,9 +3,9 @@
 
 Camera::Camera( float screenWidth, float screenHeight )
 {
-    position = glm::vec3( 0.f , 5.f, 0.f);
-    forward = glm::vec3( 0.f, -1.f, 0.f );
-    up = glm::vec3( 0.f, 0.f, -1.f );
+    position = glm::vec3( 0.f , 0.f, 50.f);
+    forward = glm::vec3( 0.f, 0.f, -1.f );
+    up = glm::vec3( 0.f, 1.f, 0.f );
 
     fov = 60.f * glm::pi<float>() / 180.0f;
     width = screenWidth;

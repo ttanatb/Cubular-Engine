@@ -12,7 +12,7 @@ TankServer::TankServer( const int aPort )
     timer = GameTime::GetInstance();
     timer->Init();
 
-    ServerWorker();
+    ServerThread = std::thread( &Networking::TankServer::ServerWorker, this );
     UpdateGameObjects();
 }
 
@@ -22,6 +22,16 @@ TankServer::~TankServer()
     // Cleanup -------------------
     closesocket( ServerSocket );
     WSACleanup();
+}
+
+void Networking::TankServer::ShutDown()
+{
+    isDone = true;
+
+    if ( ServerThread.joinable() )
+    {
+        ServerThread.join();
+    }
 }
 
 void TankServer::ServerWorker()
@@ -77,7 +87,7 @@ void TankServer::ServerWorker()
 
         if ( ( recv_len = recvfrom( ServerSocket, buf, DEF_BUF_LEN, 0, ( struct sockaddr* ) &si_other, &slen ) ) == SOCKET_ERROR )
         {
-            DEBUG_PRINT( "recvfrom failed with error code : %d\n", WSAGetLastError() );
+            DEBUG_PRINT( "recvfrom failed with error code : %d", WSAGetLastError() );
             exit( EXIT_FAILURE );
         }
 
@@ -86,28 +96,68 @@ void TankServer::ServerWorker()
         inet_ntop( AF_INET, &( si_other.sin_addr ), ip_str, INET_ADDRSTRLEN );
         std::string newIP = ip_str;
 
+        DEBUG_PRINT( "Data received %s from %s", buf, ip_str );
+
         if ( !ClientExists( newIP ) )
         {
             char ackCmd[ 64 ];
-            strcpy_s( ackCmd, 64, "ACK" );
+
+            //put conenction type in the first thing
+            int32_t type = ConnectionType::ConnectionAck;
+            memcpy( ackCmd, &type, sizeof( int32_t ) );
+
+            //assign the client ID and put it in the command and reply to the client
+            Command outCommand = { };
+            outCommand.clientId = ConnectedClients.size();
+            memcpy( ackCmd + sizeof( int32_t ), &outCommand, sizeof( Command ) );
+
             ConnectedClients.push_back( newIP );
+            BroadcastedGameObject gObj = { };
+            gObj.gameObjId = outCommand.clientId;
+
+
             // Send an acknowledgment back to this client that they have connected
-            if ( sendto( ServerSocket, ackCmd, strlen( ackCmd ) + 1, 0, ( struct sockaddr * )&si_other, slen ) == SOCKET_ERROR )
+            if ( sendto( ServerSocket, ackCmd, sizeof( Command ) + sizeof( int32_t ), 0, ( struct sockaddr * )&si_other, slen ) == SOCKET_ERROR )
             {
                 DEBUG_PRINT( "ack send failed with error code : %d", WSAGetLastError() );
                 exit( EXIT_FAILURE );
             }
+
+            gameObjects.push_back( gObj );
         }
-
-        ProcessCmd( buf );
-
-        // Do something with the received message
-        DEBUG_PRINT( "Data received: %s from %s\n", buf, ip_str );
-
-        if ( sendto( ServerSocket, buf, recv_len, 0, ( struct sockaddr * )&si_other, slen ) == SOCKET_ERROR )
+        else  //otherwise process the command and reply with broadcast stuff
         {
-            DEBUG_PRINT( "sendto failed with error code : %d", WSAGetLastError() );
-            exit( EXIT_FAILURE );
+            ProcessCmd( buf );
+
+            memset( buf, '\0', DEF_BUF_LEN );
+            std::vector<BroadcastedGameObject> broadcastedObjs = std::vector<BroadcastedGameObject>();
+            int32_t connectionType = ConnectionType::ConnectionAck; //default (won't get processed)
+
+            if ( broadcastedObject.size() > 0 )
+            {
+                broadcastedObject.pop_front( broadcastedObjs );
+                
+                //set the connection type
+                if ( broadcastedObjs.size() > 0 )
+                    connectionType = ConnectionType::Broadcast;
+            }
+
+            memcpy( buf, &connectionType, sizeof( int32_t ) );
+
+            //set the count
+            int32_t count = static_cast<int32_t>( broadcastedObjs.size() );
+            memcpy( buf + sizeof( int32_t ), &count, sizeof( int32_t ) );
+
+            //copy the rest of the broadcasted objects over
+            if ( broadcastedObjs.size() > 0 )
+                memcpy( buf + 2 * sizeof( int32_t ), &broadcastedObjs[ 0 ], sizeof( BroadcastedGameObject ) * count );
+
+            // Do something with the received message
+            if ( sendto( ServerSocket, buf, sizeof( BroadcastedGameObject ) * count + 2 * sizeof( int32_t ), 0, ( struct sockaddr * )&si_other, slen ) == SOCKET_ERROR )
+            {
+                DEBUG_PRINT( "sendto failed with error code : %d", WSAGetLastError() );
+                exit( EXIT_FAILURE );
+            }
         }
     }
 }
@@ -119,18 +169,60 @@ inline const int Networking::TankServer::GetPort() const
 
 void TankServer::UpdateGameObjects()
 {
-    float dt = timer->GetDeltaFloatTime();
-    //read all the commands in the queue?
-
-    for ( size_t i = 0; i < rigidBodies.size(); ++i )
+    while ( 1 )
     {
-        gameObjects[ i ].x += rigidBodies[ i ].speedX * dt;
-        gameObjects[ i ].y += rigidBodies[ i ].speedY * dt;
+        if ( isDone ) return;
+
+        //basically pop out a bunch of commands from the queue and fill out the vector
+        size_t cmdCount = commandQueue.size();
+        std::vector<Command> cmdVector( cmdCount );
+        for ( int i = 0; i < cmdCount; ++i )
+        {
+            Command c = {};
+            commandQueue.pop_front( c );
+            cmdVector[ i ] = c;
+        }
+
+        //loop through the vector of command
+        for ( size_t i = 0; i < cmdVector.size(); ++i )
+        {
+            Command cmd = cmdVector[ i ];
+
+            //apply the right commands to the right game object in an inefficiant O(n2) way
+            for ( size_t j = 0; j < gameObjects.size(); ++j )
+            {
+                if ( cmd.clientId == gameObjects[ j ].gameObjId )
+                {
+
+                    //process the command
+                    if ( cmd.move_down )
+                    {
+                        gameObjects[ j ].y--;
+                    }
+                    else if ( cmd.move_up )
+                    {
+                        gameObjects[ j ].y++;
+                    }
+                    else if ( cmd.move_left )
+                    {
+                        gameObjects[ j ].x++;
+                    }
+                    else if ( cmd.move_right )
+                    {
+                        gameObjects[ j ].x--;
+                    }
+                }
+            }
+        }
+
+        //emplace a copy of the gameobj state
+        if ( cmdCount > 0 )
+        {
+            std::vector< BroadcastedGameObject > toBroadcast( gameObjects.size() );
+            memcpy( &toBroadcast[ 0 ], &gameObjects[ 0 ], gameObjects.size() * sizeof( BroadcastedGameObject ) );
+            broadcastedObject.emplace_back( toBroadcast );
+        }
     }
-
-    //broadcast out all the gameObjects?
-
-    timer->UpdateTimer();
 }
 
 bool TankServer::ClientExists( std::string & clientIP )
@@ -149,20 +241,27 @@ void TankServer::ProcessCmd( char * aCmd )
 {
     assert( aCmd != nullptr );
 
-    // TODO: validate this command
-
     Command outCommand;
-    memcpy( &outCommand, ( void* ) ( aCmd ), sizeof( Command ) );
-   
-    // Replace with the Stream
+    memcpy( &outCommand, aCmd, sizeof( Command ) );
 
-    printf( "Client ID : %d \n", outCommand.clientId );
-    printf( "\tL: %d\n", outCommand.move_left );
-    printf( "\tR: %d\n", outCommand.move_right );
-    printf( "\tU: %d\n", outCommand.move_up );
-    printf( "\tD: %d\n", outCommand.move_down );
+    //validate the packet
+
+    if ( outCommand.move_left && outCommand.move_right )
+    {
+        outCommand.move_left = 0;
+        outCommand.move_right = 0;
+    }
+
+    if ( outCommand.move_down && outCommand.move_up )
+    {
+        outCommand.move_down = 0;
+        outCommand.move_up = 0;
+    }
+
+    commandQueue.emplace_back( outCommand );
 }
 
-void TankServer::BroadCastToAllClients( Command cmd )
+void TankServer::BroadCastToAllClients()
 {
+
 }

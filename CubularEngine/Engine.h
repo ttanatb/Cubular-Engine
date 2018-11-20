@@ -6,27 +6,31 @@ class Camera;
 class Input;
 class GameEntityManager;
 
+#include "TankClient.h"
+
 class Engine
 {
 public:
-    Engine();
+    Engine( Networking::TankClient* client );
     ~Engine();
 
     int Init();
     void Run();
 private:
     int LoadAssets();
-    GLFWwindow *window;
 
-    GLuint shaderProgram;
-    GLuint vs;
-    GLuint fs;
+    GLFWwindow *window = nullptr;
 
-    Mesh* tankMesh;
-    Material* tankMaterial;
+    GLuint shaderProgram = 0;
+    GLuint vs = 0;
+    GLuint fs = 0;
 
-    Camera* camera;
+    Mesh* tankMesh = nullptr;
+    Material* tankMaterial = nullptr;
 
-    Input* input;
-    GameEntityManager* gameEntityManager;
+    Camera* camera = nullptr;
+
+    Input* input = nullptr;
+    GameEntityManager* gameEntityManager = nullptr;
+    Networking::TankClient* client = nullptr;
 };

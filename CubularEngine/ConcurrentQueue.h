@@ -58,7 +58,7 @@ public:
         {
             DataAvailableCondition.wait( waitLock );
         }
-        aItem = std::move( front() );
+        aItem = T( TheDequeue.front() );
         TheDequeue.pop_front();
     }
 

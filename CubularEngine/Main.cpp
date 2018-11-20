@@ -89,13 +89,16 @@ int main( int argc, char* argv[] )
         {
             Client = std::make_unique<Networking::TankClient>( "127.0.0.1", PORT );
 
-            Engine engine = Engine();
+            Engine engine = Engine(Client.get());
             if ( engine.Init() == 0 )
             {
                 engine.Run();
             }
+
+            Client->ShutDown();
         }
     }   // Client scope
+
 
     return 0;
 }

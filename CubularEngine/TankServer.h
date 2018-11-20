@@ -10,6 +10,7 @@ namespace Networking
 {
     struct BroadcastedGameObjectRigidBody
     {
+        int32_t gameObjId;
         float speedX;
         float speedY;
     };
@@ -36,6 +37,12 @@ namespace Networking
         ~TankServer();
 
         /// <summary>
+        /// Signal to the client that we should stop listening for  
+        /// commands from the server and to shut down
+        /// </summary>
+        void ShutDown();
+
+        /// <summary>
         /// Method where the server can process commands 
         /// </summary>
         void ServerWorker();
@@ -59,6 +66,8 @@ namespace Networking
         /** A vector of connected clients where the string is their IP addr */
         std::vector<std::string> ConnectedClients;
 
+        std::thread ServerThread;
+
         /** Atomic flag to check if we are done */
         std::atomic<bool> isDone;
 
@@ -74,15 +83,20 @@ namespace Networking
         /// </summary>
         /// <param name="aCmd">Char command that was recieved from the client</param>
         void ProcessCmd( char* aCmd );
-      
+
         /// <summary>
         /// Send this command update to all current clients
         /// </summary>
         /// <param name="cmd">The command to send</param>
-        void BroadCastToAllClients( Command cmd );
+        void BroadCastToAllClients();
 
         std::vector<BroadcastedGameObject> gameObjects;
         std::vector<BroadcastedGameObjectRigidBody> rigidBodies;
+
+        ConcurrentQueue<Command> commandQueue;
+        ConcurrentQueue<std::vector<BroadcastedGameObject>> broadcastedObject;
+
+        const float MAX_SPEED = 3.0f;
 
         GameTime *timer;
 
