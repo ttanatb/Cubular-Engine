@@ -46,12 +46,14 @@ TankClient::TankClient( const char* aServerAddress, const int aPort )
 
 TankClient::~TankClient()
 {
+    ShutDown();
+
     // Cleanup Winsock ------------------
     closesocket( ClientSocket );
     WSACleanup();
 }
 
-void Networking::TankClient::SendCommand( Command cmd )
+void TankClient::SendCommand( Command cmd )
 {
     // Add this command to the command queue
     cmd.clientId = clientID;
@@ -67,7 +69,7 @@ void TankClient::ClientWorkThread()
     struct sockaddr_in  si_other;
     slen = sizeof( si_other );
 
-    memset( (char*) &si_other, 0, sizeof( si_other ) );
+    memset( ( char* ) &si_other, 0, sizeof( si_other ) );
     si_other.sin_family = AF_INET;
     si_other.sin_addr.s_addr = INADDR_ANY;
     si_other.sin_port = htons( CurrentPort );
@@ -92,7 +94,7 @@ void TankClient::ClientWorkThread()
             // TODO: Replace with the streams
 
             char charCmd[ 64 ];
-            memcpy( charCmd, (void*) ( &cmdToSend ), sizeof( Command ) );
+            memcpy( charCmd, ( void* ) ( &cmdToSend ), sizeof( Command ) );
 
             if ( sendto( serverSock, charCmd, sizeof( Command ), 0,
                 ( struct sockaddr* ) &si_other, slen ) == SOCKET_ERROR )
@@ -147,7 +149,7 @@ void TankClient::ClientWorkThread()
     }
 }
 
-void Networking::TankClient::ShutDown()
+void TankClient::ShutDown()
 {
     isDone = true;
 

@@ -24,7 +24,7 @@ TankServer::~TankServer()
     WSACleanup();
 }
 
-void Networking::TankServer::ShutDown()
+void TankServer::ShutDown()
 {
     isDone = true;
 
@@ -136,7 +136,7 @@ void TankServer::ServerWorker()
             if ( broadcastedObject.size() > 0 )
             {
                 broadcastedObject.pop_front( broadcastedObjs );
-                
+
                 //set the connection type
                 if ( broadcastedObjs.size() > 0 )
                     connectionType = ConnectionType::Broadcast;
@@ -145,7 +145,7 @@ void TankServer::ServerWorker()
             memcpy( buf, &connectionType, sizeof( int32_t ) );
 
             //set the count
-            int32_t count = static_cast<int32_t>( broadcastedObjs.size() );
+            int32_t count = static_cast< int32_t >( broadcastedObjs.size() );
             memcpy( buf + sizeof( int32_t ), &count, sizeof( int32_t ) );
 
             //copy the rest of the broadcasted objects over
@@ -242,7 +242,7 @@ void TankServer::ProcessCmd( char * aCmd )
     assert( aCmd != nullptr );
 
     Command outCommand;
-    memcpy( &outCommand, aCmd, sizeof( Command ) );
+    memcpy( &outCommand, ( void* ) aCmd, sizeof( Command ) );
 
     //validate the packet
 
