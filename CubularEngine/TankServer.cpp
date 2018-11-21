@@ -118,19 +118,18 @@ void TankServer::ServerWorker()
             DEBUG_PRINT( "First time receiving command from client ID %d", gObj.gameObjId );
 
             //add the gameobject to the vector of gameobjects if 
-            bool contains = false;
-            for ( size_t i = 0; i < gameObjects.size(); ++i )
-            {
-                if ( gameObjects[ i ].gameObjId == gObj.gameObjId )
-                {
-                    contains = true;
-                    break;
-                }
-            }
+            //bool contains = false;
+            //for ( size_t i = 0; i < gameObjects.size(); ++i )
+            //{
+            //    if ( gameObjects[ i ].gameObjId == gObj.gameObjId )
+            //    {
+            //        contains = true;
+            //        break;
+            //    }
+            //}
 
-            if ( !contains )
-                gameObjects.push_back( gObj );
-
+            //if ( !contains )
+            gameObjects.push_back( gObj );
             DEBUG_PRINT( "There are now %zd gameObjects", gameObjects.size() );
 
             // Send an acknowledgment back to this client that they have connected
@@ -151,24 +150,7 @@ void TankServer::ServerWorker()
 
             if ( vector.size() > 0 )
             {
-                int32_t connectionType = ConnectionType::Broadcast;
-                memcpy( buf, &connectionType, sizeof( int32_t ) );
-
-                //set the count
-                int32_t count = static_cast<int32_t>( vector.size() );
-                memcpy( buf + sizeof( int32_t ), &count, sizeof( int32_t ) );
-
-                //copy the rest of the broadcasted objects over
-                if ( vector.size() > 0 )
-                    memcpy( buf + 2 * sizeof( int32_t ), &vector[ 0 ], sizeof( BroadcastedGameObject ) * count );
-
-                // Do something with the received message
-                if ( sendto( ServerSocket, buf, sizeof( BroadcastedGameObject ) * count + 2 * sizeof( int32_t ), 0, ( struct sockaddr * )&si_other, slen ) == SOCKET_ERROR )
-                {
-                    DEBUG_PRINT( "sendto failed with error code : %d", WSAGetLastError() );
-                    exit( EXIT_FAILURE );
-                }
-                DEBUG_PRINT( "'Broadcasted' the g objs' positions of size %d", count );
+                BroadCastToAllClients( vector );
             }
             else
             {
@@ -281,14 +263,8 @@ Command TankServer::ProcessCmd( char * aCmd )
     return outCommand;
 }
 
-void TankServer::BroadCastToAllClients()
+void TankServer::BroadCastToAllClients( std::vector< BroadcastedGameObject > &vecOfObjs )
 {
-    if ( broadcastedObject.empty() ) return;
-    
-    std::vector<BroadcastedGameObject> vecOfObjs;
-    broadcastedObject.pop_front( vecOfObjs );    
-
-
     struct sockaddr_in  si_curClient;
     int slen = sizeof( si_curClient );
     char buf[ DEF_BUF_LEN ];
@@ -334,6 +310,6 @@ void TankServer::BroadCastToAllClients()
             DEBUG_PRINT( "sendto failed with error code : %d", WSAGetLastError() );
             exit( EXIT_FAILURE );
         }
-
+        DEBUG_PRINT( "'Broadcasted' the g objs' positions of size %d", count );
     }
 }

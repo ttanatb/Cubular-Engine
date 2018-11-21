@@ -87,7 +87,7 @@ namespace Networking
         /// Send this command update to all current clients
         /// </summary>
         /// <param name="cmd">The command to send</param>
-        void BroadCastToAllClients();
+        void BroadCastToAllClients( std::vector< BroadcastedGameObject > &vecOfObjs );
 
         std::vector<BroadcastedGameObject> gameObjects;
         std::vector<BroadcastedGameObjectRigidBody> rigidBodies;
