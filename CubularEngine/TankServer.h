@@ -53,8 +53,7 @@ namespace Networking
         /// <returns>Current port that the server is running</returns>
         inline const int GetPort() const;
 
-        void UpdateGameObjects();
-
+        void UpdateGameObjects( Command  cmd, std::vector< BroadcastedGameObject > &vector );
     private:
 
         /** The socket for the server to use */
@@ -82,7 +81,7 @@ namespace Networking
         /// Process a command received from the client
         /// </summary>
         /// <param name="aCmd">Char command that was recieved from the client</param>
-        void ProcessCmd( char* aCmd );
+        Command ProcessCmd( char* aCmd );
 
         /// <summary>
         /// Send this command update to all current clients

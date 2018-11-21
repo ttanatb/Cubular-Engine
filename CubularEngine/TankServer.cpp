@@ -14,8 +14,7 @@ TankServer::TankServer( const int aPort )
     gameObjects = std::vector<BroadcastedGameObject>();
     gameObjects.reserve( MAX_CONNECTIONS );
 
-    ServerThread = std::thread( &Networking::TankServer::ServerWorker, this );
-    UpdateGameObjects();
+    ServerWorker();
 }
 
 TankServer::~TankServer()
@@ -86,7 +85,6 @@ void TankServer::ServerWorker()
         fflush( stdout );
 
         memset( buf, '\0', DEF_BUF_LEN );
-
         if ( ( recv_len = recvfrom( ServerSocket, buf, DEF_BUF_LEN, 0, ( struct sockaddr* ) &si_other, &slen ) ) == SOCKET_ERROR )
         {
             DEBUG_PRINT( "recvfrom failed with error code : %d", WSAGetLastError() );
@@ -130,7 +128,7 @@ void TankServer::ServerWorker()
                 }
             }
 
-            if (!contains)
+            if ( !contains )
                 gameObjects.push_back( gObj );
 
             DEBUG_PRINT( "There are now %zd gameObjects", gameObjects.size() );
@@ -145,25 +143,24 @@ void TankServer::ServerWorker()
         }
         else  //otherwise process the command and reply with broadcast stuff
         {
-            ProcessCmd( buf );
-
+            Command command = ProcessCmd( buf );
             memset( buf, '\0', DEF_BUF_LEN );
 
-            if ( !broadcastedObject.empty() )
-            {
-                std::vector<BroadcastedGameObject> vecOfObjs;
-                broadcastedObject.pop_front( vecOfObjs );
+            std::vector<BroadcastedGameObject> vector;
+            UpdateGameObjects( command, vector );
 
+            if ( vector.size() > 0 )
+            {
                 int32_t connectionType = ConnectionType::Broadcast;
                 memcpy( buf, &connectionType, sizeof( int32_t ) );
 
                 //set the count
-                int32_t count = static_cast<int32_t>( vecOfObjs.size() );
+                int32_t count = static_cast<int32_t>( vector.size() );
                 memcpy( buf + sizeof( int32_t ), &count, sizeof( int32_t ) );
 
                 //copy the rest of the broadcasted objects over
-                if ( vecOfObjs.size() > 0 )
-                    memcpy( buf + 2 * sizeof( int32_t ), &vecOfObjs[ 0 ], sizeof( BroadcastedGameObject ) * count );
+                if ( vector.size() > 0 )
+                    memcpy( buf + 2 * sizeof( int32_t ), &vector[ 0 ], sizeof( BroadcastedGameObject ) * count );
 
                 // Do something with the received message
                 if ( sendto( ServerSocket, buf, sizeof( BroadcastedGameObject ) * count + 2 * sizeof( int32_t ), 0, ( struct sockaddr * )&si_other, slen ) == SOCKET_ERROR )
@@ -198,74 +195,51 @@ inline const int Networking::TankServer::GetPort() const
     return Port;
 }
 
-void TankServer::UpdateGameObjects()
+void TankServer::UpdateGameObjects( Command  cmd, std::vector<BroadcastedGameObject> &vector )
 {
-    while ( 1 )
+    //apply the right commands to the right game object in an inefficiant O(n2) way
+    for ( size_t j = 0; j < gameObjects.size(); ++j )
     {
-        if ( isDone ) return;
-
-        //basically pop out a bunch of commands from the queue and fill out the vector
-        size_t cmdCount = commandQueue.size();
-        std::vector<Command> cmdVector;
-        cmdVector.reserve( cmdCount );
-        for ( int i = 0; i < cmdCount; ++i )
+        if ( cmd.clientId == gameObjects[ j ].gameObjId )
         {
-            Command c = {};
-            commandQueue.pop_front( c );
-            cmdVector.push_back(c);
-        }
-
-        //loop through the vector of command
-        for ( size_t i = 0; i < cmdVector.size(); ++i )
-        {
-            Command cmd = cmdVector[ i ];
-
-            //apply the right commands to the right game object in an inefficiant O(n2) way
-            for ( size_t j = 0; j < gameObjects.size(); ++j )
+            //process the command
+            if ( cmd.move_down )
             {
-                if ( cmd.clientId == gameObjects[ j ].gameObjId )
-                {
-
-                    //process the command
-                    if ( cmd.move_down )
-                    {
-                        gameObjects[ j ].y -= 0.1f;
-                        if ( gameObjects[ j ].y < -10 ) 
-                            gameObjects[ j ].y = -10;
-                    }
-                    else if ( cmd.move_up )
-                    {
-                        gameObjects[ j ].y += 0.1f;
-                        if ( gameObjects[ j ].y > 10 )
-                            gameObjects[ j ].y = 10;
-                    }
-                    if ( cmd.move_left )
-                    {
-                        gameObjects[ j ].x += 0.1f;
-                        if ( gameObjects[ j ].x > 10 )
-                            gameObjects[ j ].x = 10;
-                    }
-                    else if ( cmd.move_right )
-                    {
-                        gameObjects[ j ].x -= 0.1f;
-                        if ( gameObjects[ j ].x < -10 )
-                            gameObjects[ j ].x = -10;
-                    }
-                }
+                gameObjects[ j ].y -= 0.1f;
+                if ( gameObjects[ j ].y < -10 )
+                    gameObjects[ j ].y = -10;
             }
+            else if ( cmd.move_up )
+            {
+                gameObjects[ j ].y += 0.1f;
+                if ( gameObjects[ j ].y > 10 )
+                    gameObjects[ j ].y = 10;
+            }
+
+            if ( cmd.move_left )
+            {
+                gameObjects[ j ].x += 0.1f;
+                if ( gameObjects[ j ].x > 10 )
+                    gameObjects[ j ].x = 10;
+            }
+            else if ( cmd.move_right )
+            {
+                gameObjects[ j ].x -= 0.1f;
+                if ( gameObjects[ j ].x < -10 )
+                    gameObjects[ j ].x = -10;
+            }
+
+            break;
         }
+    }
 
-        //emplace a copy of the gameobj state
-        if ( cmdCount > 0  && gameObjects.size() > 0)
-        {
-            std::vector< BroadcastedGameObject > toBroadcast;
-            toBroadcast.reserve( gameObjects.size() );
+    //emplace a copy of the gameobj state
+    if ( gameObjects.size() > 0 )
+    {
+        vector.reserve( gameObjects.size() );
 
-            for ( size_t i = 0; i < gameObjects.size(); ++i )
-                toBroadcast.push_back( gameObjects[ i ] );
-
-            broadcastedObject.emplace_back( toBroadcast );
-        }
+        for ( size_t i = 0; i < gameObjects.size(); ++i )
+            vector.push_back( gameObjects[ i ] );
     }
 }
 
@@ -281,7 +255,7 @@ bool TankServer::ClientExists( std::string & clientIP )
     return false;
 }
 
-void TankServer::ProcessCmd( char * aCmd )
+Command TankServer::ProcessCmd( char * aCmd )
 {
     assert( aCmd != nullptr );
 
@@ -302,7 +276,9 @@ void TankServer::ProcessCmd( char * aCmd )
         outCommand.move_up = 0;
     }
 
-    commandQueue.emplace_back( outCommand );
+    DEBUG_PRINT( "Processing command: L%d, R%d, U%d, D%d", outCommand.move_left, outCommand.move_right, outCommand.move_up, outCommand.move_down );
+
+    return outCommand;
 }
 
 void TankServer::BroadCastToAllClients()
