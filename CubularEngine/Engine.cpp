@@ -90,43 +90,30 @@ void Engine::Run()
         glfwPollEvents();
 
         //breaks out of the loop if user presses ESC
+        Networking::Command c = { };
         if ( input->IsKeyDown( GLFW_KEY_ESCAPE ) )
             break;
         else if ( input->IsKeyDown( GLFW_KEY_LEFT ) )
-        {
-            Networking::Command c = { };
             c.move_left = 1;
-            client->SendCommand( c );
-        }
         else if ( input->IsKeyDown( GLFW_KEY_UP ) )
-        {
-            Networking::Command c = { };
             c.move_up = 1;
-            client->SendCommand( c );
-        }
         else if ( input->IsKeyDown( GLFW_KEY_DOWN ) )
-        {
-            Networking::Command c = { };
             c.move_down = 1;
-            client->SendCommand( c );
-        }
         else if ( input->IsKeyDown( GLFW_KEY_RIGHT ) )
-        {
-            Networking::Command c = { };
             c.move_right = 1;
+
+        if ( c.move_down || c.move_left || c.move_right || c.move_up )
             client->SendCommand( c );
-        }
 
         if ( !client->broadcastedObject.empty() )
         {
-            std::vector<Networking::BroadcastedGameObject> vector(client->broadcastedObject.size());
-            vector.push_back( { } );    //push and empty thing to the first memory adress to make it not throw eerrors
+            std::vector<Networking::BroadcastedGameObject> vector;
             client->broadcastedObject.pop_front( vector );
             gameEntityManager->Update( vector );
         }
 
         /* GAMEPLAY UPDATE */
-        std::unordered_map<uint32_t, GameEntity *> *gameEntities = gameEntityManager->GetGameEntities( );
+        std::unordered_map<uint32_t, GameEntity *> *gameEntities = gameEntityManager->GetGameEntities();
         for ( const auto& pair : *gameEntities )
             ( *gameEntities )[ pair.first ]->Update();
 
