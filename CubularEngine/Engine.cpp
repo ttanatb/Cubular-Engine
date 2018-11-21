@@ -6,10 +6,12 @@
 #include "Material.h"
 #include "Mesh.h"
 #include "ShaderHelper.h"
+#include "GameTime.h"
 
 Engine::Engine( Networking::TankClient* client )
 {
     this->client = client;
+    timer = GameTime::GetInstance();
 }
 
 Engine::~Engine()
@@ -24,6 +26,7 @@ Engine::~Engine()
 
     Input::Release();
     GameEntityManager::Release();
+    GameTime::ReleaseInstance();
 }
 
 int Engine::Init()
@@ -69,6 +72,9 @@ int Engine::Init()
 
     gameEntityManager = GameEntityManager::GetInstance();
     gameEntityManager->Init( tankMaterial, tankMesh );
+
+    timer->Init();
+
     return 0;
 }
 
@@ -90,20 +96,26 @@ void Engine::Run()
         glfwPollEvents();
 
         //breaks out of the loop if user presses ESC
+        static float lastCmdTime = 0.0f;
+
         Networking::Command c = { };
         if ( input->IsKeyDown( GLFW_KEY_ESCAPE ) )
             break;
-        else if ( input->IsKeyDown( GLFW_KEY_LEFT ) )
+        if ( input->IsKeyDown( GLFW_KEY_LEFT ) )
             c.move_left = 1;
-        else if ( input->IsKeyDown( GLFW_KEY_UP ) )
-            c.move_up = 1;
-        else if ( input->IsKeyDown( GLFW_KEY_DOWN ) )
-            c.move_down = 1;
-        else if ( input->IsKeyDown( GLFW_KEY_RIGHT ) )
+        if ( input->IsKeyDown( GLFW_KEY_RIGHT ) )
             c.move_right = 1;
+        if ( input->IsKeyDown( GLFW_KEY_UP ) )
+            c.move_up = 1;
+        if ( input->IsKeyDown( GLFW_KEY_DOWN ) )
+            c.move_down = 1;
 
-        if ( c.move_down || c.move_left || c.move_right || c.move_up )
+        static const float CMD_TIME = .01f;
+        if ( timer->GetTotalFloatTime() - lastCmdTime > CMD_TIME )
+        {
+            lastCmdTime = timer->GetTotalFloatTime();
             client->SendCommand( c );
+        }
 
         if ( !client->broadcastedObject.empty() )
         {
@@ -137,6 +149,8 @@ void Engine::Run()
 
         //swaps the front buffer with the back buffer
         glfwSwapBuffers( window );
+
+        timer->UpdateTimer();
     }
 
     this->client->isDone = true;

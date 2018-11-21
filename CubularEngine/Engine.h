@@ -5,6 +5,7 @@ class Material;
 class Camera;
 class Input;
 class GameEntityManager;
+class GameTime;
 
 #include "TankClient.h"
 
@@ -29,6 +30,7 @@ private:
     Material* tankMaterial = nullptr;
 
     Camera* camera = nullptr;
+    GameTime* timer = nullptr;
 
     Input* input = nullptr;
     GameEntityManager* gameEntityManager = nullptr;

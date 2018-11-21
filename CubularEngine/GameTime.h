@@ -10,7 +10,7 @@ public:
     /// <summary>
     /// Releases singleton object of time
     /// </summary>
-    void ReleaseInstance();
+    static void ReleaseInstance();
     /// <summary>
     /// Intializes preformance counter, current time, previous time
     /// </summary>
