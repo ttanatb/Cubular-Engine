@@ -307,8 +307,15 @@ void TankServer::ProcessCmd( char * aCmd )
 
 void TankServer::BroadCastToAllClients()
 {
+    if ( broadcastedObject.empty() ) return;
+    
+    std::vector<BroadcastedGameObject> vecOfObjs;
+    broadcastedObject.pop_front( vecOfObjs );    
+
+
     struct sockaddr_in  si_curClient;
     int slen = sizeof( si_curClient );
+    char buf[ DEF_BUF_LEN ];
 
     auto itr = ConnectedClients.begin();
     for ( ; itr != ConnectedClients.end(); ++itr )
@@ -326,5 +333,31 @@ void TankServer::BroadCastToAllClients()
         
         mbstowcs_s( &outSize, wtext, clientAddr.c_str(), strlen( clientAddr.c_str() ) + 1 );
         InetPton( AF_INET, wtext, &si_curClient.sin_addr.S_un.S_addr );
+
+
+        // TANAT PUT THE COMMAND STUFF HERE ---------------------
+
+        int32_t connectionType = ConnectionType::Broadcast;
+        memcpy( buf, &connectionType, sizeof( int32_t ) );
+
+        //set the count
+        int32_t count = static_cast< int32_t >( vecOfObjs.size() );
+        memcpy( buf + sizeof( int32_t ), &count, sizeof( int32_t ) );
+
+        //copy the rest of the broadcasted objects over
+        if ( vecOfObjs.size() > 0 )
+            memcpy( buf + 2 * sizeof( int32_t ), &vecOfObjs[ 0 ], sizeof( BroadcastedGameObject ) * count );
+
+        // Do something with the received message
+        if ( sendto( ServerSocket,
+            buf,
+            sizeof( BroadcastedGameObject ) * count + 2 * sizeof( int32_t ),
+            0, 
+            ( struct sockaddr * )&si_curClient, slen ) == SOCKET_ERROR )
+        {
+            DEBUG_PRINT( "sendto failed with error code : %d", WSAGetLastError() );
+            exit( EXIT_FAILURE );
+        }
+
     }
 }
