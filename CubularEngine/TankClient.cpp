@@ -69,7 +69,7 @@ void TankClient::ClientWorkThread()
     struct sockaddr_in  si_other;
     slen = sizeof( si_other );
 
-    memset( ( char* ) &si_other, 0, sizeof( si_other ) );
+    memset( (char*) &si_other, 0, sizeof( si_other ) );
     si_other.sin_family = AF_INET;
     si_other.sin_addr.s_addr = INADDR_ANY;
     si_other.sin_port = htons( CurrentPort );
@@ -94,7 +94,7 @@ void TankClient::ClientWorkThread()
             // TODO: Replace with the streams
 
             char charCmd[ 64 ];
-            memcpy( charCmd, ( void* ) ( &cmdToSend ), sizeof( Command ) );
+            memcpy( charCmd, (void*) ( &cmdToSend ), sizeof( Command ) );
 
             if ( sendto( serverSock, charCmd, sizeof( Command ), 0,
                 ( struct sockaddr* ) &si_other, slen ) == SOCKET_ERROR )
@@ -125,7 +125,7 @@ void TankClient::ClientWorkThread()
                     Command command = {};
                     memcpy( &command, buf, sizeof( Command ) );
                     clientID = command.clientId;
-                    DEBUG_PRINT( "Connection to server acknowledged" );
+                    DEBUG_PRINT( "Connection to server acknowledged, this client's ID is %d", clientID );
                 }
 
                 //validate that command is being received?
@@ -137,12 +137,18 @@ void TankClient::ClientWorkThread()
                 memcpy( &count, buf + sizeof( int32_t ), sizeof( int32_t ) );
 
                 //read all other broad casted game objs
-                std::vector<BroadcastedGameObject> vector( count );
-                memcpy( &vector[ 0 ], buf + 2 * sizeof( int32_t ), count * sizeof( BroadcastedGameObject ) );
+                std::vector<BroadcastedGameObject> vector;
+                vector.reserve( count );
+                for ( size_t i = 0; i < count; ++i )
+                {
+                    BroadcastedGameObject obj = { };
+                    memcpy( &obj, buf + 2 * sizeof( int32_t ) + i * sizeof( BroadcastedGameObject ), sizeof( BroadcastedGameObject ) );
+                    vector.push_back( obj );
+                } 
 
                 //place in the command queueueueueueueueueu
                 broadcastedObject.emplace_back( vector );
-                DEBUG_PRINT( "Emplaced vector of broadcasted objects" );
+                DEBUG_PRINT( "Received broadcasted obj of count %d", count );
             }
             puts( buf );
         }
