@@ -30,4 +30,5 @@ private:
     std::vector<GameEntity *> gameEntities;
 
     Input* input;
+    Configs* config;
 };

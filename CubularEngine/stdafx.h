@@ -10,20 +10,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+//lua binding
+#define SOL_CHECK_ARGUMENTS 1
+#include <sol/sol.hpp>
+#include <cassert>
+
+//additional debugging and memory leak detection
 //Memory leak detection
 #ifdef _DEBUG
+
 #define _CRTDBG_MAP_ALLOC  
 #include <stdlib.h>  
-#include <crtdbg.h>
 #include <iostream>
-#endif
-
-#include "Utils.h"
-#include "Configs.h"
-
-#if defined(_DEBUG) 
-#define _CRTDBG_MAP_ALLOC  
-
 #include <crtdbg.h> 
 
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -33,3 +31,7 @@
 #include <stdexcpt.h>
 #include <stdexcept>
 #endif
+
+
+#include "Utils.h"
+#include "Configs.h"

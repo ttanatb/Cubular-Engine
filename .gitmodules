@@ -1,3 +1,6 @@
 [submodule "additionalLibraries/sol2"]
 	path = additionalLibraries/sol2
 	url = git@github.com:ThePhD/sol2.git
+[submodule "additionalLibraries/luaforwindows"]
+	path = additionalLibraries/luaforwindows
+	url = git@github.com:rjpcomputing/luaforwindows.git

@@ -7,10 +7,7 @@
 #include "Mesh.h"
 #include "ShaderHelper.h"
 
-Engine::Engine()
-{
-}
-
+Engine::Engine() { }
 
 Engine::~Engine()
 {
@@ -24,10 +21,14 @@ Engine::~Engine()
         delete gameEntities[ i ];
 
     Input::Release();
+    Configs::Release();
 }
 
 int Engine::Init()
 {
+    //initialize configs
+    config = Configs::GetInstance();
+
     //initializing GLFW
     if ( glfwInit() == GLFW_FALSE )
     {
@@ -38,9 +39,9 @@ int Engine::Init()
 
     //creating window
     window = glfwCreateWindow(
-        Configs::WindowWidth,
-        Configs::WindowHeight,
-        Configs::WindowTitle,
+        config->GetWindowWidth(),
+        config->GetWindowHeight(),
+        config->GetWindowTitle(),
         nullptr,
         nullptr
     );
@@ -69,6 +70,7 @@ int Engine::Init()
     //init systems
     input = Input::GetInstance();
     input->Init( window );
+
 
     return 0;
 }
@@ -179,8 +181,8 @@ int Engine::LoadAssets()
     tankMaterial = new Material( shaderProgram );
 
     camera = new Camera(
-        static_cast<float>( Configs::WindowWidth ),
-        static_cast<float>( Configs::WindowHeight )
+        static_cast<float>( config->GetWindowWidth() ),
+        static_cast<float>( config->GetWindowHeight() )
     );
 
     return 0;

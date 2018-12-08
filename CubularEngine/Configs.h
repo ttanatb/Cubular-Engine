@@ -3,7 +3,19 @@
 class Configs
 {
 public:
-    static const int WindowWidth = 800;
-    static const int WindowHeight = 600;
-    static const char* WindowTitle;
+    const int GetWindowWidth()   { return windowWidth; } 
+    const int GetWindowHeight()  { return windowHeight; } 
+    const char* GetWindowTitle() { return windowTitle; } 
+    
+    static Configs* GetInstance();
+    static void Release();
+
+private:
+    Configs();
+
+    static Configs* instance;
+
+    int windowWidth;
+    int windowHeight;
+    const char* windowTitle;
 };
