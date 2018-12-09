@@ -1,7 +1,12 @@
 #include "stdafx.h"
 #include "UIEntity.h"
 
-UIEntity::UIEntity( glm::vec2 startingPos, glm::vec2 startingSize )
+UIEntity::UIEntity( 
+    glm::vec2 startingPos, 
+    glm::vec2 startingSize, 
+    const char* startScriptName,
+    const char* updateScriptName )
+    :IEntity(startScriptName, updateScriptName)
 {
     pos = startingPos;
     size = startingSize;

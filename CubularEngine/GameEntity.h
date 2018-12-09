@@ -22,7 +22,9 @@ public:
 /// </summary>
     GameEntity(
         Mesh* mesh,
-        Material* material
+        Material* material,
+        const char* startScriptName,
+        const char* updateScriptName
     );
 
     ~GameEntity();

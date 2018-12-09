@@ -6,7 +6,10 @@
 
 GameEntity::GameEntity(
     Mesh* mesh,
-    Material * material )
+    Material * material,
+    const char* startScriptName,
+    const char* updateScriptName )
+    :IEntity( startScriptName, updateScriptName )
 {
     this->mesh = mesh;
     this->material = material;

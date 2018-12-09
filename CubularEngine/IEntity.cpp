@@ -5,9 +5,11 @@
 #include "Mesh.h"
 #include <algorithm>
 
-IEntity::IEntity() 
+IEntity::IEntity( const char* startScriptName, const char* updateScriptName )
 {
     children = std::vector<IEntity*>();
+    //startScript.load_file( std::string( C_SCRIPT_DIR ) + std::string( startScriptName ) );
+    //updateScript.load_file( std::string( C_SCRIPT_DIR ) + std::string( updateScriptName ) );
 }
 IEntity::~IEntity() 
 {

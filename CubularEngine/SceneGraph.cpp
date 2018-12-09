@@ -9,10 +9,21 @@ SceneGraph::SceneGraph()
     ResourceManager* r = ResourceManager::GetInstance();
     root = new GameEntity(
         r->GetMesh( std::string( C_MESH_TANK ) ),
-        r->GetMaterial( std::string( C_MAT_TANK ) )
+        r->GetMaterial( std::string( C_MAT_TANK ) ),
+        "",
+        ""
+        
     );
 
-    root->AddChild( new UIEntity( glm::vec2( 50.f, 100.f ), glm::vec2( 200.f, 200.f ) ) );
+    root->AddChild( 
+        new UIEntity( 
+            glm::vec2( 50.f, 100.f ), 
+            glm::vec2( 200.f, 200.f ),
+            "",
+            ""
+        ) 
+    );
+
     root->GetChildren()[ 0 ]->SetName( "Test UI" );
 }
 

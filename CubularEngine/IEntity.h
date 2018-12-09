@@ -15,8 +15,11 @@ protected:
     std::vector<IEntity*> children;
     IEntity* parent = nullptr;
     char name[ NAME_LENGTH ];
+
+    sol::state startScript;
+    sol::state updateScript;
 public: 
-    IEntity();
+    IEntity(const char* startScriptName, const char* updateScriptName);
 
     /// <summary>
     /// Destruction

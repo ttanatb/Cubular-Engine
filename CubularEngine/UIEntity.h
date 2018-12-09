@@ -6,7 +6,9 @@ class UIEntity : public IEntity
 public:
     UIEntity(
         glm::vec2 startingPos,
-        glm::vec2 startingSize
+        glm::vec2 startingSize,
+        const char* startScriptName, 
+        const char* updateScriptName
     );
     ~UIEntity();
 

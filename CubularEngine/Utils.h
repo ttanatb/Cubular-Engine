@@ -8,3 +8,5 @@
 
 #define C_MESH_TANK "tankMesh"
 #define C_MAT_TANK "tankMat"
+
+#define C_SCRIPT_DIR "assets/scripts/"
