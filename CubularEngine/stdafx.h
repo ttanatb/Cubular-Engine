@@ -2,10 +2,16 @@
 
 #include <vector>
 
-//GL and GLM
+//GL, Glew, GLFW
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+#include "imgui.h"
+#include "examples/imgui_impl_glfw.h"
+#include "examples/imgui_impl_opengl3.h"
+
+//GlM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -31,7 +37,6 @@
 #include <stdexcpt.h>
 #include <stdexcept>
 #endif
-
 
 #include "Utils.h"
 #include "Configs.h"

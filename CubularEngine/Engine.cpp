@@ -1,25 +1,29 @@
 #include "stdafx.h"
 #include "Camera.h"
 #include "Engine.h"
-#include "GameEntity.h"
 #include "Input.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "ShaderHelper.h"
+#include "SceneGraph.h"
+#include "ResourceManager.h"
 
 Engine::Engine() { }
 
 Engine::~Engine()
 {
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    //glfwDestroyWindow( window );
     glfwTerminate();
     if ( fs ) glDeleteShader( fs );
     if ( vs ) glDeleteShader( vs );
-    if ( tankMesh ) delete tankMesh;
-    if ( tankMaterial ) delete tankMaterial;
     if ( camera ) delete camera;
-    for ( size_t i = 0; i < gameEntities.size(); ++i )
-        delete gameEntities[ i ];
+    if ( sceneGraph ) delete sceneGraph;
 
+    ResourceManager::ReleaseInstance();
     Input::Release();
     Configs::Release();
 }
@@ -30,6 +34,7 @@ int Engine::Init()
     config = Configs::GetInstance();
 
     //initializing GLFW
+    glfwSetErrorCallback( Engine::ErrorCallBack );
     if ( glfwInit() == GLFW_FALSE )
     {
         DEBUG_PRINT( "GLFW failed to initialize" );
@@ -52,6 +57,7 @@ int Engine::Init()
     }
     else DEBUG_PRINT( "Window successfully created!" );
     glfwMakeContextCurrent( window );
+    glfwSwapInterval( 1 );
 
     //init glew
     if ( glewInit() != GLEW_OK )
@@ -61,16 +67,28 @@ int Engine::Init()
     }
     else DEBUG_PRINT( "GLEW successfully initialized!" );
 
+    // Set up Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void) io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+
+    // binding for glfw platform and openGL
+    ImGui_ImplGlfw_InitForOpenGL( window, true );
+    ImGui_ImplOpenGL3_Init( "#version 400" );
+
+    // style
+    ImGui::StyleColorsDark();
+
     int result = LoadAssets();
     if ( result != 0 ) return result;
 
-    result = InitGameEntities();
-    if ( result != 0 ) return result;
+    sceneGraph = new SceneGraph();
+    sceneGraph->InitFromConfig();
 
     //init systems
     input = Input::GetInstance();
     input->Init( window );
-
 
     return 0;
 }
@@ -96,10 +114,13 @@ void Engine::Run()
         if ( input->IsKeyDown( GLFW_KEY_ESCAPE ) )
             break;
 
-        /* GAMEPLAY UPDATE */
-        for ( size_t i = 0; i < gameEntities.size(); ++i )
-            gameEntities[ i ]->Update();
+        //ready imgui for the next frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
+        /* GAMEPLAY UPDATE */
+        sceneGraph->Update();
         camera->Update();
 
         /* PRE-RENDER */
@@ -109,10 +130,11 @@ void Engine::Run()
         glClearColor( 0.392f, 0.584f, 0.929f, 1.0f );
 
         /* RENDER */
-        for ( size_t i = 0; i < gameEntities.size(); ++i )
-            gameEntities[ i ]->Render( camera );
+        sceneGraph->Render( camera );
 
         /* POST-RENDER */
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData( ImGui::GetDrawData() );
 
         //'clear' for next draw call
         glBindVertexArray( 0 );
@@ -123,8 +145,15 @@ void Engine::Run()
     }
 }
 
+void Engine::ErrorCallBack( int error, const char * description )
+{
+    DEBUG_PRINT( "GLFW Error %d: %s\n", error, description );
+}
+
 int Engine::LoadAssets()
 {
+    ResourceManager *resourceMngr = ResourceManager::GetInstance();
+
     //load and build shaders
     vs = ShaderHelper::LoadFromFile( "assets/shaders/vertexShader.glsl", GL_VERTEX_SHADER );
     fs = ShaderHelper::LoadFromFile( "assets/shaders/fragmentShader.glsl", GL_FRAGMENT_SHADER );
@@ -174,11 +203,13 @@ int Engine::LoadAssets()
             -1.0f, 1.0f, 1.0f,
             1.0f,-1.0f, 1.0f
     };
-    tankMesh = new Mesh();
+    Mesh* tankMesh = new Mesh();
     tankMesh->InitWithVertexArray( vertices, _countof( vertices ), shaderProgram );
+    resourceMngr->AddMesh( std::string( C_MESH_TANK ), tankMesh );
 
     //load material
-    tankMaterial = new Material( shaderProgram );
+    Material* tankMaterial = new Material( shaderProgram );
+    resourceMngr->AddMaterial( std::string( C_MAT_TANK ), tankMaterial );
 
     camera = new Camera(
         static_cast<float>( config->GetWindowWidth() ),
@@ -188,14 +219,3 @@ int Engine::LoadAssets()
     return 0;
 }
 
-int Engine::InitGameEntities()
-{
-    gameEntities.push_back( new GameEntity( 
-        tankMesh,
-        tankMaterial,
-        glm::vec3( 0.f ),
-        glm::vec3( 0.f ),
-        glm::vec3( 1.f )
-    ) );
-    return 0;
-}

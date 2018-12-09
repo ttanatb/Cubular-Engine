@@ -93,7 +93,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)additionalLibraries\sol2\single;$(SolutionDir)additionalLibraries\luaforwindows\files\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)additionalLibraries\sol2\single;$(SolutionDir)additionalLibraries\luaforwindows\files\include;$(SolutionDir)additionalLibraries\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>glew.lib;opengl32.lib;lua51.lib</AdditionalDependencies>
@@ -113,7 +113,7 @@ xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dl
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)additionalLibraries\sol2\single;$(SolutionDir)additionalLibraries\luaforwindows\files\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)additionalLibraries\sol2\single;$(SolutionDir)additionalLibraries\luaforwindows\files\include;$(SolutionDir)additionalLibraries\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>glew.lib;opengl32.lib;lua51.lib</AdditionalDependencies>
@@ -135,7 +135,7 @@ xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dl
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)additionalLibraries\sol2\single;$(SolutionDir)additionalLibraries\luaforwindows\files\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)additionalLibraries\sol2\single;$(SolutionDir)additionalLibraries\luaforwindows\files\include;$(SolutionDir)additionalLibraries\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -159,7 +159,7 @@ xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dl
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)additionalLibraries\sol2\single;$(SolutionDir)additionalLibraries\luaforwindows\files\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)additionalLibraries\sol2\single;$(SolutionDir)additionalLibraries\luaforwindows\files\include;$(SolutionDir)additionalLibraries\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -175,14 +175,48 @@ xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dl
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\additionalLibraries\imgui\examples\imgui_impl_glfw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\additionalLibraries\imgui\examples\imgui_impl_opengl3.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\additionalLibraries\imgui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\additionalLibraries\imgui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\additionalLibraries\imgui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Configs.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameEntity.cpp" />
+    <ClCompile Include="IEntity.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="SceneGraph.cpp" />
+    <ClCompile Include="UIEntity.cpp" />
     <ClCompile Include="ShaderHelper.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -197,13 +231,21 @@ xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dl
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\additionalLibraries\imgui\examples\imgui_impl_glfw.h" />
+    <ClInclude Include="..\additionalLibraries\imgui\examples\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\additionalLibraries\imgui\imgui.h" />
+    <ClInclude Include="..\additionalLibraries\imgui\imgui_internal.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Configs.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameEntity.h" />
+    <ClInclude Include="IEntity.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="SceneGraph.h" />
+    <ClInclude Include="UIEntity.h" />
     <ClInclude Include="ShaderHelper.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Utils.h" />

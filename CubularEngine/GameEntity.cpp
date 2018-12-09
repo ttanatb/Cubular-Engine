@@ -1,20 +1,18 @@
 #include "stdafx.h"
-#include "Camera.h"
 #include "GameEntity.h"
 #include "Material.h"
 #include "Mesh.h"
+#include "Camera.h"
 
-GameEntity::GameEntity(Mesh * mesh, 
-    Material * material,
-    glm::vec3 position, 
-    glm::vec3 eulerAngles, 
-    glm::vec3 scale)
+GameEntity::GameEntity(
+    Mesh* mesh,
+    Material * material )
 {
     this->mesh = mesh;
     this->material = material;
-    this->position = position;
-    this->eulerAngles = eulerAngles;
-    this->scale = scale;
+    this->position = glm::vec3( 0.f );
+    this->eulerAngles = glm::vec3( 0.f );
+    this->scale = glm::vec3( 1.f );
     worldMatrix = glm::identity<glm::mat4>();
 }
 
@@ -24,16 +22,12 @@ GameEntity::~GameEntity()
 
 void GameEntity::Update()
 {
-    eulerAngles.y += 0.001f;   //very small increment because we don't have deltaTime
-
-    worldMatrix = glm::rotate(glm::identity<glm::mat4>(),
-        this->eulerAngles.y,
-        glm::vec3(0.f, 1.f, 0.f)
-    );
+    IEntity::Update();
 }
 
-void GameEntity::Render(Camera* camera)
+void GameEntity::Render( Camera * camera )
 {
-    material->Bind(camera, worldMatrix);
+    material->Bind( camera, worldMatrix );
     mesh->Render();
+    IEntity::Render( camera );
 }

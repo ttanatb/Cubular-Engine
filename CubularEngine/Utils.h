@@ -5,3 +5,6 @@
 #else
 #define DEBUG_PRINT(a, ...)
 #endif
+
+#define C_MESH_TANK "tankMesh"
+#define C_MAT_TANK "tankMat"

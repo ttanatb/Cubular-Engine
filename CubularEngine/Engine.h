@@ -1,10 +1,11 @@
 #pragma once
 
+//forward declare all these classes (included in .cpp)
 class Mesh;
 class Material;
 class Camera;
-class GameEntity;
 class Input;
+class SceneGraph;
 
 class Engine
 {
@@ -14,21 +15,19 @@ public:
 
     int Init();
     void Run();
+
+    static void ErrorCallBack( int error, const char* description );
 private:
     int LoadAssets();
-    int InitGameEntities();
     GLFWwindow *window;
 
     GLuint shaderProgram;
     GLuint vs;
     GLuint fs;
 
-    Mesh* tankMesh;
-    Material* tankMaterial;
-
     Camera *camera;
-    std::vector<GameEntity *> gameEntities;
 
     Input* input;
     Configs* config;
+    SceneGraph* sceneGraph;
 };

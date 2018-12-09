@@ -1,50 +1,34 @@
 #pragma once
+#include "IEntity.h"
 
 class Mesh;
 class Material;
-class Camera;
 
-/// <summary>
-/// Represents one 'renderable' objet
-/// </summary>
-class GameEntity
+class GameEntity : public IEntity
 {
 private:
-    Mesh* mesh;        
-    Material* material;
-
     //TODO - maybe this should be in a transform class?
     glm::vec3 position;
     glm::vec3 eulerAngles;
     glm::vec3 scale;
-    
     glm::mat4 worldMatrix;
-public: 
+
+    Mesh* mesh = nullptr;
+    Material* material = nullptr;
+
+public:
     /// <summary>
-    /// Basic paramterized constructor for most of our private vars
-    /// </summary>
+/// Basic paramterized constructor for most of our private vars
+/// </summary>
     GameEntity(
         Mesh* mesh,
-        Material* material,
-        glm::vec3 position,
-        glm::vec3 eulerAngles,
-        glm::vec3 scale
+        Material* material
     );
 
-    /// <summary>
-    /// Destruction
-    /// </summary>
-    virtual ~GameEntity();
+    ~GameEntity();
 
-    /// <summary>
-    /// Updates the worldMatrix
-    /// </summary>
-    virtual void Update();
+    void Update() override;
 
-    /// <summary>
-    /// Renders the gameEntity based on a camera
-    /// </summary>
-    void Render(Camera* camera);
-
+    void Render( Camera* camera ) override;
 };
 

@@ -5,44 +5,79 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{02206246-bc45-4e19-8eff-1d34e89acef3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{155fd156-d2fd-409b-a4eb-eed8f09fb803}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{326b25c0-45ea-42c3-a53c-f6c8801e5974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{85265943-2c2e-4deb-9f04-63403ef97b08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EntitySystem">
+      <UniqueIdentifier>{816e02a6-3e4c-4c1e-9c22-654a4eb10b02}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\additionalLibraries\imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\additionalLibraries\imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\additionalLibraries\imgui\examples\imgui_impl_glfw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\additionalLibraries\imgui\examples\imgui_impl_opengl3.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\additionalLibraries\imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="Configs.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="ShaderHelper.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="IEntity.cpp">
+      <Filter>EntitySystem</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEntity.cpp">
+      <Filter>EntitySystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraph.cpp">
+      <Filter>EntitySystem</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIEntity.cpp">
+      <Filter>EntitySystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -55,35 +90,59 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\additionalLibraries\imgui\imgui.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\additionalLibraries\imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="GameEntity.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\additionalLibraries\imgui\examples\imgui_impl_glfw.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\additionalLibraries\imgui\examples\imgui_impl_opengl3.h">
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="Configs.h">
-      <Filter>Header Files</Filter>
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="ShaderHelper.h">
-      <Filter>Header Files</Filter>
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEntity.h">
+      <Filter>EntitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="IEntity.h">
+      <Filter>EntitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraph.h">
+      <Filter>EntitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIEntity.h">
+      <Filter>EntitySystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

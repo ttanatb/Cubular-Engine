@@ -4,3 +4,6 @@
 [submodule "additionalLibraries/luaforwindows"]
 	path = additionalLibraries/luaforwindows
 	url = git@github.com:rjpcomputing/luaforwindows.git
+[submodule "additionalLibraries/imgui"]
+	path = additionalLibraries/imgui
+	url = git@github.com:ocornut/imgui.git
