@@ -31,4 +31,5 @@ Configs::Configs() {
     windowWidth = configs.get<int>( SCRIPT_CONFIG_WINDOW_WIDTH );
     windowHeight = configs.get<int>( SCRIPT_CONFIG_WINDOW_HEIGTH );
     windowTitle = configs.get<const char*>( SCRIPT_CONFIG_WINDOW_TITLE );
+    lua.end();
 }

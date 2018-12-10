@@ -10,16 +10,17 @@ class Camera;
 class IEntity
 {
 protected:
-    const static size_t NAME_LENGTH = 16;
-
     std::vector<IEntity*> children;
     IEntity* parent = nullptr;
-    char name[ NAME_LENGTH ];
+    std::string name;
 
-    sol::state startScript;
-    sol::state updateScript;
+    sol::state script;
+    sol::function startFunc;
+    sol::function updateFunc;
 public: 
-    IEntity(const char* startScriptName, const char* updateScriptName);
+    IEntity() { }
+
+    IEntity( const char* scriptName );
 
     /// <summary>
     /// Destruction
@@ -49,7 +50,7 @@ public:
     /// <summary>
     /// Get the name of the entity
     /// </summary>
-    const char* GetName() const { return name; }
+    std::string GetName() const { return name; }
     
     /// <summary>
     /// Adds a child to this entity's children vector
@@ -66,6 +67,6 @@ public:
     /// <summary>
     /// Set the name of the entity
     /// </summary>
-    void SetName(const char* newName);
+    void SetName( std::string newName ) { name = newName; }
 };
 

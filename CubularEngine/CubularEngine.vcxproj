@@ -73,18 +73,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)_Binary\</OutDir>
     <IntDir>$(SolutionDir)_Binary\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <CustomBuildBeforeTargets>FinalizeBuildStatus</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)_Binary\</OutDir>
     <IntDir>$(SolutionDir)_Binary\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <CustomBuildBeforeTargets>FinalizeBuildStatus</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)_Binary\</OutDir>
     <IntDir>$(SolutionDir)_Binary\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <CustomBuildBeforeTargets>FinalizeBuildStatus</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)_Binary\</OutDir>
     <IntDir>$(SolutionDir)_Binary\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <CustomBuildBeforeTargets>FinalizeBuildStatus</CustomBuildBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -100,11 +104,16 @@
       <AdditionalLibraryDirectories>$(SolutionDir)additionalLibraries\luaforwindows\files\lib;$(SolutionDir)packages\glew.1.9.0.1\build\native\lib\v110\Win32\Debug\static</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir "$(OutDir)assets"
-xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
-xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua51.dll" "$(OutDir)"
+      <Command>xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua51.dll" "$(OutDir)"
 xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>mkdir "$(OutDir)assets"
+xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
+</Command>
+      <Outputs>iPutThisHereSoThatVSalwaysExecutesThis</Outputs>
+      <Message>Copying scripts over</Message>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -120,11 +129,16 @@ xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dl
       <AdditionalLibraryDirectories>$(SolutionDir)packages\glew.1.9.0.1\build\native\lib\v110\x64\Debug\static;$(SolutionDir)additionalLibraries\luaforwindows\files\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir "$(OutDir)assets"
-xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
-xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua51.dll" "$(OutDir)"
+      <Command>xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua51.dll" "$(OutDir)"
 xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>mkdir "$(OutDir)assets"
+xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
+</Command>
+      <Outputs>iPutThisHereSoThatVSalwaysExecutesThis</Outputs>
+      <Message>Copying scripts over</Message>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -144,11 +158,16 @@ xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dl
       <AdditionalLibraryDirectories>$(SolutionDir)additionalLibraries\luaforwindows\files\lib;$(SolutionDir)packages\glew.1.9.0.1\build\native\lib\v110\Win32\Debug\static</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir "$(OutDir)assets"
-xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
-xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua51.dll" "$(OutDir)"
+      <Command>xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua51.dll" "$(OutDir)"
 xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>mkdir "$(OutDir)assets"
+xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
+</Command>
+      <Outputs>iPutThisHereSoThatVSalwaysExecutesThis</Outputs>
+      <Message>Copying scripts over</Message>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -168,11 +187,16 @@ xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dl
       <AdditionalLibraryDirectories>$(SolutionDir)packages\glew.1.9.0.1\build\native\lib\v110\x64\Debug\static;$(SolutionDir)additionalLibraries\luaforwindows\files\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir "$(OutDir)assets"
-xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
-xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua51.dll" "$(OutDir)"
+      <Command>xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua51.dll" "$(OutDir)"
 xcopy /y /d "$(SolutionDir)additionalLibraries\luaforwindows\files\lib\lua5.1.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>mkdir "$(OutDir)assets"
+xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
+</Command>
+      <Outputs>iPutThisHereSoThatVSalwaysExecutesThis</Outputs>
+      <Message>Copying scripts over</Message>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\additionalLibraries\imgui\examples\imgui_impl_glfw.cpp">

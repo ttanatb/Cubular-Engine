@@ -1,16 +1,22 @@
 #include "stdafx.h"
 #include "UIEntity.h"
 
-UIEntity::UIEntity( 
-    glm::vec2 startingPos, 
-    glm::vec2 startingSize, 
-    const char* startScriptName,
-    const char* updateScriptName )
-    :IEntity(startScriptName, updateScriptName)
+UIEntity::UIEntity(
+    const char* scriptName )
+    :IEntity( scriptName )
 {
-    pos = startingPos;
-    size = startingSize;
+    script.new_usertype<UIEntity>( "test_entity",
+        "getParent", &UIEntity::GetParent,
+        "getChildren", &UIEntity::GetChildren,
+        "getName", &UIEntity::GetName,
+        "setName", &UIEntity::SetName,
+        "setSize", &UIEntity::SetSize,
+        "setPos", &UIEntity::SetPos
+    );
 
+    script[ "entity" ] = this;
+
+    startFunc();
 }
 
 UIEntity::~UIEntity()
@@ -19,7 +25,7 @@ UIEntity::~UIEntity()
 
 void UIEntity::Update()
 {
-    ImGui::Begin( name );
+    ImGui::Begin( name.c_str() );
     ImGui::SetWindowPos( { pos.x, pos.y } );
     ImGui::SetWindowSize( { size.x, size.y } );
     ImGui::Text( "Test" );
@@ -30,4 +36,14 @@ void UIEntity::Update()
 void UIEntity::Render( Camera * camera )
 {
     IEntity::Render( camera );
+}
+
+void UIEntity::SetPos( float x, float y )
+{
+    pos = glm::vec2( x, y );
+}
+
+void UIEntity::SetSize( float x, float y )
+{
+    size = glm::vec2( x, y );
 }

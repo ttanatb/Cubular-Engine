@@ -3,6 +3,7 @@
 
 class Mesh;
 class Material;
+class ResourceManager;
 
 class GameEntity : public IEntity
 {
@@ -15,22 +16,20 @@ private:
 
     Mesh* mesh = nullptr;
     Material* material = nullptr;
+    ResourceManager* resourceManager = nullptr;
 
 public:
     /// <summary>
-/// Basic paramterized constructor for most of our private vars
-/// </summary>
-    GameEntity(
-        Mesh* mesh,
-        Material* material,
-        const char* startScriptName,
-        const char* updateScriptName
-    );
+    /// Basic paramterized constructor for most of our private vars
+    /// </summary>
+    GameEntity( const char* scriptName );
 
     ~GameEntity();
 
     void Update() override;
-
     void Render( Camera* camera ) override;
+
+    void SetMaterial( std::string matName );
+    void SetMesh( std::string meshName );
 };
 

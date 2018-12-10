@@ -4,16 +4,14 @@
 class UIEntity : public IEntity 
 {
 public:
-    UIEntity(
-        glm::vec2 startingPos,
-        glm::vec2 startingSize,
-        const char* startScriptName, 
-        const char* updateScriptName
-    );
+    UIEntity(const char* scriptName);
     ~UIEntity();
 
     void Update();
     void Render( Camera* camera ) override;
+
+    void SetPos( float x, float y );
+    void SetSize( float x, float y );
 
 private:
     glm::vec2 pos;

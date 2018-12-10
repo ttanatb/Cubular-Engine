@@ -14,7 +14,7 @@ public:
 
     size_t GetCount() const { return count; }
 private:
-    IEntity* root;
+    std::vector<IEntity *> rootEntities;
     size_t count;
 };
 

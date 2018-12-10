@@ -7,29 +7,14 @@
 SceneGraph::SceneGraph()
 {
     ResourceManager* r = ResourceManager::GetInstance();
-    root = new GameEntity(
-        r->GetMesh( std::string( C_MESH_TANK ) ),
-        r->GetMaterial( std::string( C_MAT_TANK ) ),
-        "",
-        ""
-        
-    );
-
-    root->AddChild( 
-        new UIEntity( 
-            glm::vec2( 50.f, 100.f ), 
-            glm::vec2( 200.f, 200.f ),
-            "",
-            ""
-        ) 
-    );
-
-    root->GetChildren()[ 0 ]->SetName( "Test UI" );
+    rootEntities.push_back( new GameEntity( "tank.lua" ) );
+    rootEntities.push_back( new UIEntity( "speechBox.lua" ) );
 }
 
 SceneGraph::~SceneGraph()
 {
-    delete root;
+    for ( size_t i = 0; i < rootEntities.size(); ++i )
+        delete rootEntities[ i ];
 }
 
 void SceneGraph::InitFromConfig()
@@ -38,10 +23,12 @@ void SceneGraph::InitFromConfig()
 
 void SceneGraph::Update()
 {
-    root->Update();
+    for ( size_t i = 0; i < rootEntities.size(); ++i )
+        rootEntities[ i ]->Update();
 }
 
 void SceneGraph::Render( Camera * camera )
 {
-    root->Render( camera );
+    for ( size_t i = 0; i < rootEntities.size(); ++i )
+        rootEntities[ i ]->Render( camera );
 }

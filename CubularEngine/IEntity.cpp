@@ -5,12 +5,17 @@
 #include "Mesh.h"
 #include <algorithm>
 
-IEntity::IEntity( const char* startScriptName, const char* updateScriptName )
+IEntity::IEntity( const char* scriptName )
 {
     children = std::vector<IEntity*>();
-    //startScript.load_file( std::string( C_SCRIPT_DIR ) + std::string( startScriptName ) );
-    //updateScript.load_file( std::string( C_SCRIPT_DIR ) + std::string( updateScriptName ) );
+
+    script.open_libraries( sol::lib::base );
+    script.script_file( std::string( C_SCRIPT_DIR ) + std::string( scriptName ) );
+
+    startFunc = script[ "start" ];
+    updateFunc = script[ "update" ];
 }
+
 IEntity::~IEntity() 
 {
     if ( children.empty() )
@@ -25,6 +30,7 @@ IEntity::~IEntity()
 
 void IEntity::Update()
 {
+    updateFunc();
     if ( children.empty() )
         return;
 
@@ -52,7 +58,7 @@ void IEntity::AddChild( IEntity * newChild )
     //already child of this entity
     if ( std::find( children.begin(), children.end(), newChild ) != children.end() )
     {
-        DEBUG_PRINT( "Entity (%s) already contains child (%s)", name, newChild->name );
+        DEBUG_PRINT( "Entity (%s) already contains child (%s)", name.c_str(), newChild->name.c_str() );
         return;
     }
 
@@ -68,12 +74,4 @@ void IEntity::AttachToParent( IEntity * newParent )
     //assign new parent and add itself as child
     parent = newParent;
     parent->children.push_back( this );
-}
-
-void IEntity::SetName( const char * newName )
-{
-    assert( strlen( newName ) < NAME_LENGTH );
-
-    //copy over the name
-    memcpy( name, newName, ( NAME_LENGTH - static_cast<size_t>( 1 ) ) * sizeof( char ) );
 }
