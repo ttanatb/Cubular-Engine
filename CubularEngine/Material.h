@@ -9,10 +9,10 @@ class Camera;
 class Material
 {
 private:
-    //TODO: if you have additional textures to bind, it will go here
-
     //handle to the shader program
     GLuint shaderProgram;
+
+    glm::vec3 albedo = glm::vec3( 0.f, 0.f, 0.f );
 public:
 
     /// <summary>
@@ -35,4 +35,9 @@ public:
         Camera* camera, 
         glm::mat4 worldMatrix
     );
+
+    void SetAlbedo( float x, float y, float z ) { albedo = glm::vec3( x, y, z ); }
+    float GetAlbedoX() { return albedo.x; }
+    float GetAlbedoY() { return albedo.y; }
+    float GetAlbedoZ() { return albedo.z; }
 };

@@ -7,6 +7,8 @@ This is the fragment shader, and it's main job is to determine the color for eac
 
 in vec4 vsps_worldPos;
 
+uniform vec3 albedoColor;
+
 out vec4 color;
 
 
@@ -14,5 +16,5 @@ out vec4 color;
 //entry point for the fragment shader
 void main(void)
 {
-    color = vec4(normalize(vsps_worldPos.rgb), 1);
+    color = vec4(albedoColor, 1);
 }

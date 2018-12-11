@@ -7,6 +7,7 @@
 #include "ShaderHelper.h"
 #include "SceneGraph.h"
 #include "ResourceManager.h"
+//#include "ScriptManager.h"
 
 Engine::Engine() { }
 
@@ -21,8 +22,8 @@ Engine::~Engine()
     if ( fs ) glDeleteShader( fs );
     if ( vs ) glDeleteShader( vs );
     if ( camera ) delete camera;
-    if ( sceneGraph ) delete sceneGraph;
 
+    SceneGraph::ReleaseInstance();
     ResourceManager::ReleaseInstance();
     Input::Release();
     Configs::Release();
@@ -83,7 +84,7 @@ int Engine::Init()
     int result = LoadAssets();
     if ( result != 0 ) return result;
 
-    sceneGraph = new SceneGraph();
+    sceneGraph = SceneGraph::GetInstance();
     sceneGraph->InitFromConfig();
 
     //init systems

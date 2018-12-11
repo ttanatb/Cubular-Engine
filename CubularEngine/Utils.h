@@ -10,3 +10,6 @@
 #define C_MAT_TANK "tankMat"
 
 #define C_SCRIPT_DIR "assets/scripts/"
+#define C_SCRIPT_EXT ".lua"
+
+#define C_ENTITY_MAX_COUNT 1000

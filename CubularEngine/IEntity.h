@@ -17,10 +17,12 @@ protected:
     sol::state script;
     sol::function startFunc;
     sol::function updateFunc;
+
+    bool isFromLua;// = true;
 public: 
     IEntity() { }
 
-    IEntity( const char* scriptName );
+    IEntity( const char* scriptName, bool isFromLua );
 
     /// <summary>
     /// Destruction
@@ -68,5 +70,16 @@ public:
     /// Set the name of the entity
     /// </summary>
     void SetName( std::string newName ) { name = newName; }
+
+    /// <summary>
+    /// Destroys the entity
+    /// </summary>
+    virtual void Destroy();
+
+    /// <summary>
+    /// Wether or not this entity was created from the lua or
+    /// C++ side
+    /// </summary>
+    bool GetIsFromLua() { return isFromLua; }
 };
 

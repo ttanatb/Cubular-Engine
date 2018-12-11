@@ -1,3 +1,4 @@
+-- config file
 EngineConfigs = {
 	windowWidth = 1024,
 	windowHeight = 768,

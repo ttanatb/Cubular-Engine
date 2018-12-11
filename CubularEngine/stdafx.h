@@ -12,9 +12,11 @@
 #include "examples/imgui_impl_opengl3.h"
 
 //GlM
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 //lua binding
 #define SOL_CHECK_ARGUMENTS 1
