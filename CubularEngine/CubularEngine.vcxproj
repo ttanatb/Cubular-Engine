@@ -125,7 +125,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
       <AdditionalIncludeDirectories>$(SolutionDir)additionalLibraries\sol2\single;$(SolutionDir)additionalLibraries\luaforwindows\files\include;$(SolutionDir)additionalLibraries\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew.lib;opengl32.lib;lua51.lib</AdditionalDependencies>
+      <AdditionalDependencies>glew.lib;opengl32.lib;lua5.1.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)packages\glew.1.9.0.1\build\native\lib\v110\x64\Debug\static;$(SolutionDir)additionalLibraries\luaforwindows\files\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -183,7 +183,7 @@ xcopy "$(SolutionDir)assets" "$(OutDir)assets" /S /Y /E
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glew.lib;opengl32.lib;lua51.lib</AdditionalDependencies>
+      <AdditionalDependencies>glew.lib;opengl32.lib;lua5.1.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)packages\glew.1.9.0.1\build\native\lib\v110\x64\Debug\static;$(SolutionDir)additionalLibraries\luaforwindows\files\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>

@@ -1,52 +1,63 @@
 
 -- vars
 moveLeft = true
-edge = 2.5
-increment = 0.05
+edge = 4
+increment = 0.1
+child = nil
+lives = 5
 
--- start function
+--start func
 function start ()
-
-	--setting basic vars
+	
+	-- set up vars
 	entity:setName("Basic Tank")
 	entity:setMaterial("tankMat")
 	entity:setMesh("tankMesh")
 	
-	--randomness for each box
+	-- variance
 	delta = math.random() * 3.0
 	if math.random() < 0.5 then
 		delta = -delta
 	end
+	
+	r = math.random() * (0.1)
+	if math.random() > 0.5 then
+		r = -r
+	end
+	
+	-- more setting vars
 	entity:setPosition(entity:getPositionX() + delta, entity:getRotationY() + delta, entity:getPositionZ())
-	entity:setScale(0.3 * math.random(1,2), 0.05 * math.random(1,5), 0.1 * math.random(1,4))
-	entity:setRotation(delta, delta, delta)
-	entity:setAlbedo( math.random() * 0.8 + 0.2, 0, math.random()* 0.8 + 0.2 )
+	entity:setScale(0.25 + r, 0.25 + r, 0.25 + r)
+	entity:setRotation(0, 1, 0)
+	entity:setAlbedo( math.random()* 0.6 + 0.4, math.random()* 0.6 + 0.4, 0 )
 end
 
--- update function
+-- update func
 function update ()	
-
-	--get position
+	--get pos
 	posX = entity:getPositionX()
-	posY = entity:getPositionY()
 	
-	-- move the position
+	-- move left or right
 	if moveLeft then
-		posY = posY + increment
-		if posY > edge then
+		posX = posX + increment
+		if posX > edge then
 			moveLeft = false
-			increment = increment / 3
+			increment = increment / 2
+			lives = lives - 1
 		end
 	else 
-		posY = posY - increment
-		if posY < -edge then
+		posX = posX - increment
+		if posX < -edge then
 			moveLeft = true
-			increment = increment * 3
+			increment = increment * 2
+			if lives == 0 then
+				entity:destroy()
+			end
 		end
 	end
 	
-	-- make it fancy
-	posX = math.cos(posY) 
+	--make it fancy and apply
+	posY = math.sin(posX) 
 	entity:setPosition(posX, posY, entity:getPositionZ())
-	entity:setRotation(posX, posY, math.sin(posX))
+	entity:setRotation(posX, entity:getRotationY(), entity:getRotationZ())
 end
