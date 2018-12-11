@@ -12,4 +12,6 @@
 #define C_SCRIPT_DIR "assets/scripts/"
 #define C_SCRIPT_EXT ".lua"
 
-#define C_ENTITY_MAX_COUNT 1000
+#define C_SCRIPT_SCENE_1 "scene"
+#define C_SCRIPT_SCENE_TABLE "Scene"
+#define C_SCRIPT_SCENE_OBJ_PREFIX "obj"

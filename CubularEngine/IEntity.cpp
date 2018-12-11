@@ -35,7 +35,9 @@ IEntity::~IEntity()
 
 void IEntity::Update()
 {
-    updateFunc();
+    if ( updateFunc )
+        updateFunc();
+
     if ( children.empty() )
         return;
 

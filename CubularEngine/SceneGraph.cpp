@@ -3,6 +3,7 @@
 #include "GameEntity.h"
 #include "UIEntity.h"
 #include <algorithm>
+#include "Configs.h"
 
 SceneGraph* SceneGraph::instance = nullptr;
 
@@ -13,7 +14,7 @@ void SceneGraph::AddRootEntity( IEntity * entity )
         toDealloc.push_back( entity );
 
     //exceeded entity count
-    if ( count > C_ENTITY_MAX_COUNT )
+    if ( count > Configs::GetInstance()->GetMaxEntityCount() )
         return;
     
     rootEntities.push_back( entity );
@@ -54,10 +55,24 @@ void SceneGraph::ReleaseInstance()
 
 void SceneGraph::InitFromConfig()
 {
-    //C++ side of entity creation
-    new GameEntity( "verticalBox", false );
-    new GameEntity( "horizontalBox", false );
-    new UIEntity( "speechBox", false );
+    //load lua script
+    sol::state lua;
+    lua.open_libraries( sol::lib::base, sol::lib::table );
+    lua.script_file(std::string(C_SCRIPT_DIR) + std::string(C_SCRIPT_SCENE_1) + std::string(C_SCRIPT_EXT));
+
+    //loop through the scene file and create entities
+    sol::table scene = lua[ C_SCRIPT_SCENE_TABLE ];
+    for ( int i = 0; ; ++i )
+    {
+        sol::optional<std::string> scriptName = scene[ std::string( C_SCRIPT_SCENE_OBJ_PREFIX ) + std::to_string( i ) ];
+        if ( !scriptName )  //no more elements
+            break;
+
+        std::string fileName = scriptName.value();
+        if ( fileName.length() > 1 && fileName[ 0 ] == 'u' && fileName[ 1 ] == 'i' )
+            new UIEntity( fileName.c_str(), false );
+        else new GameEntity( fileName.c_str(), false );
+    }
 }
 
 void SceneGraph::Update()

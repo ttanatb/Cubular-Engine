@@ -1,6 +1,8 @@
 -- config file
-EngineConfigs = {
-	windowWidth = 1024,
-	windowHeight = 768,
-	windowTitle = "Cubular Engine ft. Lua binding",
+Scene = {
+	obj0 = "horizontalBox",
+	obj1 = "verticalBox",
+	obj2 = "uiSpeechBox",
 }
+
+-- rootEntities = { "horizontalBox", "verticalBox", "speechBox" }

@@ -82,7 +82,7 @@ end
 -- callback for creating another speech box
 function createNewWindowButtonCallback()
 	if entity:getCount() < 20 then
-		c = speechBox.new("speechBox", true)
+		c = uiSpeechBox.new("speechBox", true)
 		entity:setPos(entity:getPosX() + 10, entity:getPosY() - 10)
 		c:setPos(entity:getPosX(), entity:getPosY())
 	end

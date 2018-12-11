@@ -6,6 +6,7 @@
 #define SCRIPT_CONFIG_WINDOW_WIDTH "windowWidth"
 #define SCRIPT_CONFIG_WINDOW_HEIGTH "windowHeight"
 #define SCRIPT_CONFIG_WINDOW_TITLE "windowTitle"
+#define SCRIPT_CONFIG_MAX_ENTITY_COUNT "maxEntityCount"
 
 Configs* Configs::instance = nullptr;
 
@@ -31,5 +32,6 @@ Configs::Configs() {
     windowWidth = configs.get<int>( SCRIPT_CONFIG_WINDOW_WIDTH );
     windowHeight = configs.get<int>( SCRIPT_CONFIG_WINDOW_HEIGTH );
     windowTitle = configs.get<const char*>( SCRIPT_CONFIG_WINDOW_TITLE );
+    maxEntityCount = configs.get<int>( SCRIPT_CONFIG_MAX_ENTITY_COUNT );
     lua.end();
 }
